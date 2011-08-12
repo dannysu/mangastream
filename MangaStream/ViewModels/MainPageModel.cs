@@ -22,11 +22,26 @@ namespace MangaStream
 {
     public class MainPageViewModel : ViewModelBase
     {
+        private bool _multipleRefreshesInProgress;
+
         public SeriesByName Series { get; private set; }
         public ObservableCollection<MangaAbstractModel> LatestChapters { get; private set; }
 
+        public ICommand RefreshCommand { get; set; }
+        public ICommand ClearCacheCommand { get; set; }
+
+        public MainPageViewModel()
+        {
+            RefreshCommand = new DelegateCommand(Refresh, CanRefresh);
+            ClearCacheCommand = new DelegateCommand(ClearCache, CanClearCache);
+
+            _multipleRefreshesInProgress = false;
+        }
+
         public void OnLoaded()
         {
+            SetLoadingStatus(true);
+
             App.AppData.Events = new AppDataEvents();
             App.AppData.Events.DataLoaded += new AppDataEvents.DataLoadedEventHandler(OnDataLoaded);
 
@@ -62,7 +77,12 @@ namespace MangaStream
 
             if (App.AppData.IsSeriesLoaded && App.AppData.IsLatestChaptersLoaded)
             {
-                NotifyPropertyChanged("DoneLoading");
+                SetLoadingStatus(false);
+            }
+
+            if (!App.AppData.IsSeriesLoaded && !App.AppData.IsLatestChaptersLoaded)
+            {
+                _multipleRefreshesInProgress = true;
             }
         }
 
@@ -95,17 +115,31 @@ namespace MangaStream
             App.AppData.ViewSeries(viewModel);
         }
 
-        public void OnRefresh()
+        public void Refresh(object param)
         {
+            SetLoadingStatus(true);
+
             // force refresh data even if there is already data in the cache
             App.AppData.LoadSeriesAsync(true);
             App.AppData.LoadLatestChaptersAsync(true);
+
+            _multipleRefreshesInProgress = true;
         }
 
-        public void ClearImagesInCache()
+        public bool CanRefresh(object param)
+        {
+            return true;
+        }
+
+        public void ClearCache(object param)
         {
             App.AppData.ClearImagesInCache();
             MessageBox.Show("Cleared cached images");
+        }
+
+        public bool CanClearCache(object param)
+        {
+            return true;
         }
 
         void OnDataLoaded(object sender, bool success)
@@ -120,14 +154,15 @@ namespace MangaStream
 
                 if (App.AppData.IsSeriesLoaded && App.AppData.IsLatestChaptersLoaded)
                 {
-                    NotifyPropertyChanged("DoneLoading");
+                    SetLoadingStatus(false);
                 }
             }
-            else
+            else if (!_multipleRefreshesInProgress)
             {
                 MessageBox.Show("Failed to load series and latest releases");
-                NotifyPropertyChanged("DoneLoading");
+                SetLoadingStatus(false);
             }
+            _multipleRefreshesInProgress = false;
         }
     }
 }

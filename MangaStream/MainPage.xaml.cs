@@ -19,23 +19,6 @@ namespace MangaStream
         public MainPage()
         {
             InitializeComponent();
-
-            ((MainPageViewModel)DataContext).PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(OnPropertyChanged);
-        }
-
-        void OnPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName.Equals("DoneLoading"))
-            {
-                HideLoadingOverlay();
-            }
-        }
-
-        // Load data for the ViewModel Items
-        private void MainPage_Loaded(object sender, RoutedEventArgs e)
-        {
-            ShowLoadingOverlay();
-            ((MainPageViewModel)DataContext).OnLoaded();
         }
 
         private void FirstListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -58,38 +41,11 @@ namespace MangaStream
             }
         }
 
-        private void RefreshButton_Click(object sender, EventArgs e)
-        {
-            ShowLoadingOverlay();
-            ((MainPageViewModel)DataContext).OnRefresh();
-        }
-
         private void PhoneApplicationPage_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            LoadingOverlay.Width = e.NewSize.Width;
-            LoadingOverlay.Height = e.NewSize.Height;
-            ProgressIndicator.Width = e.NewSize.Width;
-
             // TODO: Are there ways to know exactly what the margins and header sizes are?
             webBrowser1.Width = e.NewSize.Width - 24;
             webBrowser1.Height = e.NewSize.Height - 150;
-        }
-
-        private void ClearCacheMenu_Click(object sender, EventArgs e)
-        {
-            ((MainPageViewModel)DataContext).ClearImagesInCache();
-        }
-
-        private void ShowLoadingOverlay()
-        {
-            LoadingOverlay.Visibility = Visibility.Visible;
-            ProgressIndicator.IsIndeterminate = true;
-        }
-
-        private void HideLoadingOverlay()
-        {
-            LoadingOverlay.Visibility = Visibility.Collapsed;
-            ProgressIndicator.IsIndeterminate = false;
         }
 
         private void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)

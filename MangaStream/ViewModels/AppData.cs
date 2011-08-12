@@ -460,6 +460,8 @@ namespace MangaStream
                 // TODO: Is there a more efficient way to empty the entire table?
                 //       LINQ on Windows Phone doesn't seem to have ExecuteCommand().
                 _mangaDB.Series.DeleteAllOnSubmit(_mangaDB.Series);
+                _mangaDB.SubmitChanges();
+
                 _mangaDB.Series.InsertAllOnSubmit(series);
                 _mangaDB.SubmitChanges();
 
@@ -468,7 +470,7 @@ namespace MangaStream
                 IsSeriesLoaded = true;
                 Deployment.Current.Dispatcher.BeginInvoke(new DataLoadedTrigger(TriggerDataLoaded), true);
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 Deployment.Current.Dispatcher.BeginInvoke(new DataLoadedTrigger(TriggerDataLoaded), false);
             }
@@ -523,8 +525,10 @@ namespace MangaStream
 
                 // TODO: Is there a more efficient way to empty the entire table?
                 //       LINQ on Windows Phone doesn't seem to have ExecuteCommand().
-                var query = from MangaAbstractModel chapter in _mangaDB.Chapters where chapter.SeriesId == request.Tag && chapter.IsRecentChapter == true select chapter;
+                var query = from MangaAbstractModel chapter in _mangaDB.Chapters where chapter.IsRecentChapter == true select chapter;
                 _mangaDB.Chapters.DeleteAllOnSubmit(query);
+                _mangaDB.SubmitChanges();
+
                 _mangaDB.Chapters.InsertAllOnSubmit(latestChapters);
                 _mangaDB.SubmitChanges();
 
@@ -533,7 +537,7 @@ namespace MangaStream
                 IsLatestChaptersLoaded = true;
                 Deployment.Current.Dispatcher.BeginInvoke(new DataLoadedTrigger(TriggerDataLoaded), true);
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 Deployment.Current.Dispatcher.BeginInvoke(new DataLoadedTrigger(TriggerDataLoaded), false);
             }
@@ -591,6 +595,8 @@ namespace MangaStream
                 //       LINQ on Windows Phone doesn't seem to have ExecuteCommand().
                 var query = from MangaAbstractModel chapter in _mangaDB.Chapters where chapter.SeriesId == request.Tag && chapter.IsRecentChapter == false select chapter;
                 _mangaDB.Chapters.DeleteAllOnSubmit(query);
+                _mangaDB.SubmitChanges();
+
                 _mangaDB.Chapters.InsertAllOnSubmit(chaptersList);
                 _mangaDB.SubmitChanges();
 
@@ -670,9 +676,16 @@ namespace MangaStream
                 var imageQuery = from ImageModel imageModel in _mangaDB.Images where imageModel.MangaId == request.Tag select imageModel;
                 var pageQuery = from PageModel pageModel in _mangaDB.Pages where pageModel.MangaId == request.Tag select pageModel;
                 var mangaQuery = from MangaModel mangaModel in _mangaDB.Manga where mangaModel.MangaId == request.Tag select mangaModel;
+
                 _mangaDB.Images.DeleteAllOnSubmit(imageQuery);
+                _mangaDB.SubmitChanges();
+
                 _mangaDB.Pages.DeleteAllOnSubmit(pageQuery);
+                _mangaDB.SubmitChanges();
+
                 _mangaDB.Manga.DeleteAllOnSubmit(mangaQuery);
+                _mangaDB.SubmitChanges();
+
                 _mangaDB.Manga.InsertAllOnSubmit(mangaList);
                 foreach (MangaModel mangaModel in mangaList)
                 {

@@ -8,6 +8,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+    xmlns:ec="clr-namespace:Microsoft.Expression.Interactivity.Core;assembly=Microsoft.Expression.Interactions" 
+    xmlns:bab="clr-namespace:Phone7.Fx.Preview;assembly=Phone7.Fx.Preview"
     xmlns:me="clr-namespace:MangaStream"
     mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="800" 
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
@@ -16,13 +19,19 @@
     SupportedOrientations="Portrait"  Orientation="Portrait"
     shell:SystemTray.IsVisible="False"
     toolkit:TiltEffect.IsTiltEnabled="True"
-    Loaded="MainPage_Loaded"
     SizeChanged="PhoneApplicationPage_SizeChanged">
 
     <UserControl.DataContext>
         <me:MainPageViewModel/>
     </UserControl.DataContext>
-    
+
+    <!-- Hook up Loaded event to ViewModel -->
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <ec:CallMethodAction TargetObject="{Binding Mode=OneWay}" MethodName="OnLoaded"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
     <toolkit:TransitionService.NavigationInTransition>
         <toolkit:NavigationInTransition>
             <toolkit:NavigationInTransition.Backward>
@@ -47,6 +56,7 @@
     <phone:PhoneApplicationPage.Resources>
         <me:GroupToBackgroundBrushValueConverter x:Key="groupBackgroundBrush"/>
         <me:GroupToForegroundBrushValueConverter x:Key="groupForegroundBrush"/>
+        <me:BooleanToVisibilityConverter x:Key="boolToVisiblityConverter"/>
     </phone:PhoneApplicationPage.Resources>
 
     <!--LayoutRoot is the root grid where all page content is placed-->
@@ -135,25 +145,21 @@
                 <phone:WebBrowser HorizontalAlignment="Left" Name="webBrowser1" VerticalAlignment="Top"/>
             </controls:PivotItem>
         </controls:Pivot>
-        
-        <Canvas x:Name="LoadingOverlay" Opacity="0.6" Background="{StaticResource PhoneBackgroundBrush}" MinHeight="0" MinWidth="0">
+
+        <Canvas x:Name="LoadingOverlay" Opacity="0.6" Background="{StaticResource PhoneBackgroundBrush}" Height="{Binding ActualHeight, ElementName=LayoutRoot}" Width="{Binding ActualWidth, ElementName=LayoutRoot}" Visibility="{Binding Loading, Converter={StaticResource boolToVisiblityConverter}}">
             <Grid Background="Transparent">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="400" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <toolkit:PerformanceProgressBar Name="ProgressIndicator" Grid.Row="1" IsIndeterminate="False" VerticalAlignment="Center" Background="Transparent"/>
+                <toolkit:PerformanceProgressBar Name="ProgressIndicator" Grid.Row="1" IsIndeterminate="{Binding Loading}" VerticalAlignment="Center" Background="Transparent" Width="{Binding ActualWidth, ElementName=LayoutRoot}"/>
             </Grid>
         </Canvas>
+        
+        <bab:BindableApplicationBar IsVisible="True" IsMenuEnabled="True" Mode="Minimized" BarOpacity="0.8">
+            <bab:BindableApplicationBarIconButton IconUri="/Images/appbar.refresh.png" Text="refresh" Command="{Binding RefreshCommand}"/>
+            <bab:BindableApplicationBarMenuItem Text="clear cached images" Command="{Binding ClearCacheCommand}"/>
+        </bab:BindableApplicationBar>
     </Grid>
- 
-    <phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True" Mode="Minimized" Opacity="0.8">
-            <shell:ApplicationBarIconButton IconUri="/Images/appbar.refresh.png" Text="refresh" Click="RefreshButton_Click"/>
-            <shell:ApplicationBar.MenuItems>
-                <shell:ApplicationBarMenuItem Text="clear cached images" Click="ClearCacheMenu_Click"/>
-            </shell:ApplicationBar.MenuItems>
-        </shell:ApplicationBar>
-    </phone:PhoneApplicationPage.ApplicationBar>
 
 </phone:PhoneApplicationPage>
