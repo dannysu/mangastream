@@ -44,9 +44,9 @@ namespace MangaStream
         private const string _serializedChaptersInSeriesFile = "ChaptersInSeries";
         private const string _serializedMangaFile = "Manga";
 
-        private string _savedCurrentlyViewingSeries = "CurrentSeries";
-        private string _savedCurrentlyViewingChapter = "CurrentChapter";
-        private string _savedCurrentlyViewingPage = "CurrentPage";
+        private const string _savedCurrentlyViewingSeries = "CurrentSeries";
+        private const string _savedCurrentlyViewingChapter = "CurrentChapter";
+        private const string _savedCurrentlyViewingPage = "CurrentPage";
 
         private const string _downloadPath = "shared\\transfers\\";
 
@@ -216,7 +216,7 @@ namespace MangaStream
 
         public void Serialize()
         {
-            if (_savedCurrentlyViewingSeries != null)
+            if (_currentlyViewingSeries != null)
             {
                 IsolatedStorageSettings.ApplicationSettings[_savedCurrentlyViewingSeries] = _currentlyViewingSeries.SeriesId;
             }
@@ -225,7 +225,7 @@ namespace MangaStream
                 IsolatedStorageSettings.ApplicationSettings.Remove(_savedCurrentlyViewingSeries);
             }
 
-            if (_savedCurrentlyViewingChapter != null)
+            if (_currentlyViewingChapter != null)
             {
                 IsolatedStorageSettings.ApplicationSettings[_savedCurrentlyViewingChapter] = _currentlyViewingChapter.MangaId;
             }
@@ -282,7 +282,7 @@ namespace MangaStream
                                 ViewSeries(viewModel);
 
                                 // Also try to check if user was viewing a particular chapter in series
-                                if (_savedCurrentlyViewingSeries != null && mangaId != null)
+                                if (_currentlyViewingSeries != null && mangaId != null)
                                 {
                                     bool foundChapter = false;
 

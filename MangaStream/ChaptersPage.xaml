@@ -9,6 +9,7 @@
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
     xmlns:ec="clr-namespace:Microsoft.Expression.Interactivity.Core;assembly=Microsoft.Expression.Interactions" 
+    xmlns:bab="clr-namespace:Phone7.Fx.Preview;assembly=Phone7.Fx.Preview"
     xmlns:me="clr-namespace:MangaStream"
     x:Class="MangaStream.ChaptersPage"
     SupportedOrientations="Portrait" Orientation="Portrait"
@@ -100,13 +101,11 @@
                 <toolkit:PerformanceProgressBar x:Name="ProgressIndicator" Grid.Row="1" IsIndeterminate="{Binding Loading}" VerticalAlignment="Center" Background="Transparent" Width="{Binding ActualWidth, ElementName=LayoutRoot}"/>
             </Grid>
         </Canvas>
-    </Grid>
 
-    <!-- ApplicationBar -->
-    <phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True" Mode="Minimized" Opacity="0.8">
-            <shell:ApplicationBarIconButton IconUri="/Images/appbar.refresh.png" Text="refresh" Click="RefreshButton_Click"/>
-        </shell:ApplicationBar>
-    </phone:PhoneApplicationPage.ApplicationBar>
+        <!-- ApplicationBar -->
+        <bab:BindableApplicationBar IsVisible="true" IsMenuEnabled="false"  Mode="Minimized" BarOpacity="0.8">
+            <bab:BindableApplicationBarIconButton IconUri="/Images/appbar.refresh.png" Text="refresh" Command="{Binding RefreshCommand}"/>
+        </bab:BindableApplicationBar>
+    </Grid>
     
 </phone:PhoneApplicationPage>

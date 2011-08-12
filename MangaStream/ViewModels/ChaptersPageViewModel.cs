@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows; // For MessageBox
+using System.Windows.Input;
 using System.Windows.Controls; // For ListBox and other controls
 using System.Collections.ObjectModel;
 using System.IO;
@@ -17,8 +18,12 @@ namespace MangaStream
         public string PivotHeader { get; private set; }
         public string NavigateTarget { get; private set; }
 
+        public ICommand RefreshCommand { get; set; }
+
         public ChaptersPageViewModel()
         {
+            RefreshCommand = new DelegateCommand(Refresh, CanRefresh);
+
             SetLoadingStatus(false);
         }
 
@@ -68,12 +73,17 @@ namespace MangaStream
             }
         }
 
-        public void OnRefresh()
+        private void Refresh(object param)
         {
             SetLoadingStatus(true);
 
             // force refresh data even if there is already data in the cache
             App.AppData.LoadChaptersInSeriesAsync(true);
+        }
+
+        private bool CanRefresh(object param)
+        {
+            return true;
         }
 
         public void ListSelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -29,10 +29,5 @@ namespace MangaStream
                 NavigationService.Navigate(new Uri(((ChaptersPageViewModel)DataContext).NavigateTarget, UriKind.Relative));
             }
         }
-
-        private void RefreshButton_Click(object sender, EventArgs e)
-        {
-            ((ChaptersPageViewModel)DataContext).OnRefresh();
-        }
     }
 }
