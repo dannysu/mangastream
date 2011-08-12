@@ -26,34 +26,33 @@ namespace MangaStream
     public class AppData : INotifyPropertyChanged
     {
         // Service configuration
-        private readonly string _serverUri = "Fill In";
-        private readonly string _apiKey = "743E33CADCB2458f994E07C87FA6C6C0";
-        private readonly string _seriesRequestTemplate = "?apikey={0}&call=get_series";
-        private readonly string _latestRequestTemplate = "?apikey={0}&call=get_chapters_latest";
-        private readonly string _chaptersRequestTemplate = "?apikey={0}&call=get_chapters_by_series&series_id={1}";
-        private readonly string _chapterRequestTemplate = "?apikey={0}&call=get_chapter&manga_id={1}";
+        private const string _serverUri = "TODO: Fill In";
+        private const string _apiKey = "TODO: Fill In";
+        private const string _seriesRequestTemplate = "?apikey={0}&call=get_series";
+        private const string _latestRequestTemplate = "?apikey={0}&call=get_chapters_latest";
+        private const string _chaptersRequestTemplate = "?apikey={0}&call=get_chapters_by_series&series_id={1}";
+        private const string _chapterRequestTemplate = "?apikey={0}&call=get_chapter&manga_id={1}";
 
         // Serialization data locations
+        private const string _DBConnectionString = "Data Source=isostore:/manga.sdf";
 
-        string _DBConnectionString = "Data Source=isostore:/manga.sdf";
+        private const string _dataFileExt = ".data";
+        private const string _dataFilePattern = "*.data";
+        private const string _iconFileExt = ".ico";
+        private const string _serializedSeriesFile = "Series";
+        private const string _serializedLatestChaptersFile = "LatestChapters";
+        private const string _serializedChaptersInSeriesFile = "ChaptersInSeries";
+        private const string _serializedMangaFile = "Manga";
 
-        private string _dataFileExt = ".data";
-        private string _dataFilePattern = "*.data";
-        private string _iconFileExt = ".ico";
-        private string _serializedSeriesFile = "Series";
-        private string _serializedLatestChaptersFile = "LatestChapters";
-        private string _serializedChaptersInSeriesFile = "ChaptersInSeries";
-        private string _serializedMangaFile = "Manga";
+        private string _savedCurrentlyViewingSeries = "CurrentSeries";
+        private string _savedCurrentlyViewingChapter = "CurrentChapter";
+        private string _savedCurrentlyViewingPage = "CurrentPage";
 
-        private string _serializedCurrentlyViewingSeriesFile = "CurrentSeries";
-        private string _serializedCurrentlyViewingChapterFile = "CurrentChapter";
-        private string _serializedCurrentlyViewingPageFile = "CurrentPage";
-
-        private string _downloadPath = "shared\\transfers\\";
+        private const string _downloadPath = "shared\\transfers\\";
 
         // Retention periods
-        private int _oneWeekRetention = 7;
-        private int _oneDayRetention = 1;
+        private const int _oneWeekRetention = 7;
+        private const int _oneDayRetention = 1;
 
         public SeriesByName Series { get; private set; }
         public ObservableCollection<MangaAbstractModel> LatestChapters { get; private set; }
@@ -217,31 +216,31 @@ namespace MangaStream
 
         public void Serialize()
         {
-            if (_currentlyViewingSeries != null)
+            if (_savedCurrentlyViewingSeries != null)
             {
-                IsolatedStorageSettings.ApplicationSettings[_serializedCurrentlyViewingSeriesFile] = _currentlyViewingSeries.SeriesId;
+                IsolatedStorageSettings.ApplicationSettings[_savedCurrentlyViewingSeries] = _currentlyViewingSeries.SeriesId;
             }
             else
             {
-                IsolatedStorageSettings.ApplicationSettings.Remove(_serializedCurrentlyViewingSeriesFile);
+                IsolatedStorageSettings.ApplicationSettings.Remove(_savedCurrentlyViewingSeries);
             }
 
-            if (_currentlyViewingChapter != null)
+            if (_savedCurrentlyViewingChapter != null)
             {
-                IsolatedStorageSettings.ApplicationSettings[_serializedCurrentlyViewingChapterFile] = _currentlyViewingChapter.MangaId;
+                IsolatedStorageSettings.ApplicationSettings[_savedCurrentlyViewingChapter] = _currentlyViewingChapter.MangaId;
             }
             else
             {
-                IsolatedStorageSettings.ApplicationSettings.Remove(_serializedCurrentlyViewingChapterFile);
+                IsolatedStorageSettings.ApplicationSettings.Remove(_savedCurrentlyViewingChapter);
             }
 
             if (_currentlyViewingPage >= 0)
             {
-                IsolatedStorageSettings.ApplicationSettings[_serializedCurrentlyViewingPageFile] = _currentlyViewingPage.ToString();
+                IsolatedStorageSettings.ApplicationSettings[_savedCurrentlyViewingPage] = _currentlyViewingPage.ToString();
             }
             else
             {
-                IsolatedStorageSettings.ApplicationSettings.Remove(_serializedCurrentlyViewingPageFile);
+                IsolatedStorageSettings.ApplicationSettings.Remove(_savedCurrentlyViewingPage);
             }
 
             _backgroundTransfer.Serialize();
@@ -256,9 +255,9 @@ namespace MangaStream
                 string[] dataFiles = store.GetFileNames(_dataFilePattern);
 
                 string mangaId = null;
-                if (IsolatedStorageSettings.ApplicationSettings.Contains(_serializedCurrentlyViewingChapterFile))
+                if (IsolatedStorageSettings.ApplicationSettings.Contains(_savedCurrentlyViewingChapter))
                 {
-                    mangaId = (string)IsolatedStorageSettings.ApplicationSettings[_serializedCurrentlyViewingChapterFile];
+                    mangaId = (string)IsolatedStorageSettings.ApplicationSettings[_savedCurrentlyViewingChapter];
                 }
 
                 var latestChaptersInDB = from MangaAbstractModel chapter in _mangaDB.Chapters where chapter.IsRecentChapter == true select chapter;
@@ -273,9 +272,9 @@ namespace MangaStream
                     seriesDataFresh = IsCreationTimeFresh(series[0].CreationTime, _oneWeekRetention);
 
                     // Also try to check if user was viewing a particular series
-                    if (IsolatedStorageSettings.ApplicationSettings.Contains(_serializedCurrentlyViewingSeriesFile))
+                    if (IsolatedStorageSettings.ApplicationSettings.Contains(_savedCurrentlyViewingSeries))
                     {
-                        string seriesId = (string)IsolatedStorageSettings.ApplicationSettings[_serializedCurrentlyViewingSeriesFile];
+                        string seriesId = (string)IsolatedStorageSettings.ApplicationSettings[_savedCurrentlyViewingSeries];
                         foreach (SeriesModel viewModel in series)
                         {
                             if (viewModel.SeriesId.Equals(seriesId))
@@ -283,7 +282,7 @@ namespace MangaStream
                                 ViewSeries(viewModel);
 
                                 // Also try to check if user was viewing a particular chapter in series
-                                if (_currentlyViewingSeries != null && mangaId != null)
+                                if (_savedCurrentlyViewingSeries != null && mangaId != null)
                                 {
                                     bool foundChapter = false;
 
@@ -315,9 +314,9 @@ namespace MangaStream
 
                                     if (foundChapter)
                                     {
-                                        if (IsolatedStorageSettings.ApplicationSettings.Contains(_serializedCurrentlyViewingPageFile))
+                                        if (IsolatedStorageSettings.ApplicationSettings.Contains(_savedCurrentlyViewingPage))
                                         {
-                                            string page = (string)IsolatedStorageSettings.ApplicationSettings[_serializedCurrentlyViewingPageFile];
+                                            string page = (string)IsolatedStorageSettings.ApplicationSettings[_savedCurrentlyViewingPage];
                                             try
                                             {
                                                 _currentlyViewingPage = int.Parse(page) - 1;

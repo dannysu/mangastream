@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Data;
-using System.Windows.Media;
 using System.Globalization;
 
 namespace MangaStream

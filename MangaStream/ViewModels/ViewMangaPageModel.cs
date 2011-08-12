@@ -288,7 +288,7 @@ namespace MangaStream
                         stream = store.CreateFile("index.html");
                         stream.Write(buffer, 0, buffer.Length);
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         MessageBox.Show("Couldn't show content");
                     }
