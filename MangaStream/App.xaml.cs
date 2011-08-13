@@ -20,6 +20,8 @@ namespace MangaStream
         private static AppData _appData = null;
         private static string _loggedDebugInfo = null;
 
+        private const string _authorEmail = "TODO: Fill In";
+
         /// <summary>
         /// A static ViewModel used by the views to bind against.
         /// </summary>
@@ -174,7 +176,7 @@ namespace MangaStream
                 }
 
                 Microsoft.Phone.Tasks.EmailComposeTask task = new Microsoft.Phone.Tasks.EmailComposeTask();
-                task.To = "thedumbkid@gmail.com";
+                task.To = _authorEmail;
                 task.Subject = "Report error with MangaStream app";
                 task.Body = sb.ToString();
                 task.Show();

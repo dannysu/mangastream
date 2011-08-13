@@ -470,7 +470,7 @@ namespace MangaStream
                 IsSeriesLoaded = true;
                 Deployment.Current.Dispatcher.BeginInvoke(new DataLoadedTrigger(TriggerDataLoaded), true);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Deployment.Current.Dispatcher.BeginInvoke(new DataLoadedTrigger(TriggerDataLoaded), false);
             }
@@ -537,7 +537,7 @@ namespace MangaStream
                 IsLatestChaptersLoaded = true;
                 Deployment.Current.Dispatcher.BeginInvoke(new DataLoadedTrigger(TriggerDataLoaded), true);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Deployment.Current.Dispatcher.BeginInvoke(new DataLoadedTrigger(TriggerDataLoaded), false);
             }

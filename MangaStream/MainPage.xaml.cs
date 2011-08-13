@@ -50,10 +50,12 @@ namespace MangaStream
 
         private void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            /*
             if (Pivot.SelectedIndex == 2)
             {
                 webBrowser1.Source = new Uri("http://mobile.twitter.com/mangastream");
             }
+            */
         }
     }
 }

@@ -142,7 +142,7 @@
             </controls:PivotItem>
 
             <controls:PivotItem Header="twitter">
-                <phone:WebBrowser HorizontalAlignment="Left" Name="webBrowser1" VerticalAlignment="Top"/>
+                <phone:WebBrowser HorizontalAlignment="Left" Name="webBrowser1" VerticalAlignment="Top" Source="http://mobile.twitter.com/mangastream"/>
             </controls:PivotItem>
         </controls:Pivot>
 
