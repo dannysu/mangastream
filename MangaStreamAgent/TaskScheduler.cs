@@ -5,6 +5,7 @@ namespace MangaStreamAgent
 {
     public class ScheduledAgent : ScheduledTaskAgent
     {
+        private MangaDataContext _mangaDB;
         private BackgroundTransfer _backgroundTransfer;
 
         /// <summary>
@@ -19,6 +20,7 @@ namespace MangaStreamAgent
         protected override void OnInvoke(ScheduledTask task)
         {
             // Download latest chapters
+
             // Download manga series
 
             NotifyComplete();

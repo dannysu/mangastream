@@ -18,6 +18,7 @@ using System.Windows.Threading;
 using Newtonsoft.Json;
 using System.IO.IsolatedStorage;
 using Microsoft.Phone.Scheduler;
+using MangaStreamCommon;
 
 namespace MangaStream
 {

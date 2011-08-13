@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace MangaStream
+namespace MangaStreamCommon
 {
     public class ModelBase : INotifyPropertyChanged
     {

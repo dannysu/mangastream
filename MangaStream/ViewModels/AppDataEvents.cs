@@ -17,6 +17,7 @@ using System.Net;
 using System.Windows.Threading;
 using Newtonsoft.Json;
 using System.IO.IsolatedStorage;
+using MangaStreamCommon;
 
 namespace MangaStream
 {

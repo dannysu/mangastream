@@ -80,7 +80,6 @@
       <DependentUpon>ChaptersPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
-    <Compile Include="Converters\IntegerConverter.cs" />
     <Compile Include="Converters\InverseBooleanConverter.cs" />
     <Compile Include="Helpers\DelegateCommand.cs" />
     <Compile Include="Helpers\NavigationService.cs" />
@@ -90,8 +89,6 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\MangaDataContext.cs" />
-    <Compile Include="Models\ModelBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -101,19 +98,12 @@
     <Compile Include="ViewMangaPage.xaml.cs">
       <DependentUpon>ViewMangaPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\MangaAbstractModel.cs" />
     <Compile Include="ViewModels\AppDataEvents.cs" />
     <Compile Include="ViewModels\ChaptersPageViewModel.cs" />
-    <Compile Include="Models\ImageModel.cs" />
     <Compile Include="ViewModels\MainPageModel.cs" />
     <Compile Include="ViewModels\ViewMangaPageModel.cs" />
-    <Compile Include="Models\PageModel.cs" />
-    <Compile Include="Models\MangaModel.cs" />
     <Compile Include="Converters\GroupToForegroundBrushValueConverter.cs" />
     <Compile Include="Converters\GroupToBackgroundBrushValueConverter.cs" />
-    <Compile Include="Models\SeriesByName.cs" />
-    <Compile Include="Models\SeriesInGroup.cs" />
-    <Compile Include="Models\SeriesModel.cs" />
     <Compile Include="ViewModels\AppData.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
   </ItemGroup>
@@ -166,7 +156,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MangaStreamHelpers\MangaStreamCommon.csproj">
+    <ProjectReference Include="..\MangaStreamCommon\MangaStreamCommon.csproj">
       <Project>{349D1281-6F25-4DC4-97FB-5A89FAE793BF}</Project>
       <Name>MangaStreamCommon</Name>
     </ProjectReference>

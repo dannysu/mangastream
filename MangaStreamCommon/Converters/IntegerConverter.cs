@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace MangaStream
+namespace MangaStreamCommon
 {
     public class IntegerConverter : JsonConverter
     {

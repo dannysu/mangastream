@@ -16,7 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Data.Linq;
 using System.Data.Linq.Mapping;
 
-namespace MangaStream
+namespace MangaStreamCommon
 {
     [JsonObject(MemberSerialization.OptIn)]
     [Table]

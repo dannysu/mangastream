@@ -1,6 +1,6 @@
 ﻿using System.Data.Linq;
 
-namespace MangaStream
+namespace MangaStreamCommon
 {
     public class MangaDataContext : DataContext
     {

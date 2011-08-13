@@ -11,7 +11,7 @@ using System.Windows.Shapes;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 
-namespace MangaStream
+namespace MangaStreamCommon
 {
     public class SeriesByName : List<SeriesInGroup>
     {

@@ -42,6 +42,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Phone" />
+    <Reference Include="Newtonsoft.Json.WindowsPhone">
+      <HintPath>..\Dependencies\Newtonsoft.Json.WindowsPhone.dll</HintPath>
+    </Reference>
+    <Reference Include="system.data.linq" />
     <Reference Include="System.Windows" />
     <Reference Include="system" />
     <Reference Include="System.Core" />
@@ -51,8 +55,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BackgroundTransfer.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Converters\IntegerConverter.cs" />
+    <Compile Include="Models\ImageModel.cs" />
+    <Compile Include="Models\MangaAbstractModel.cs" />
+    <Compile Include="Models\MangaDataContext.cs" />
+    <Compile Include="Models\MangaModel.cs" />
+    <Compile Include="Models\ModelBase.cs" />
+    <Compile Include="Models\PageModel.cs" />
+    <Compile Include="Models\SeriesByName.cs" />
+    <Compile Include="Models\SeriesInGroup.cs" />
+    <Compile Include="Models\SeriesModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions />

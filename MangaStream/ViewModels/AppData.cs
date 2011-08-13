@@ -26,30 +26,9 @@ namespace MangaStream
 {
     public class AppData : INotifyPropertyChanged
     {
-        // Service configuration
-        private const string _serverUri = "TODO: Fill In";
-        private const string _apiKey = "TODO: Fill In";
-        private const string _seriesRequestTemplate = "?apikey={0}&call=get_series";
-        private const string _latestRequestTemplate = "?apikey={0}&call=get_chapters_latest";
-        private const string _chaptersRequestTemplate = "?apikey={0}&call=get_chapters_by_series&series_id={1}";
-        private const string _chapterRequestTemplate = "?apikey={0}&call=get_chapter&manga_id={1}";
-
-        // Serialization data locations
-        private const string _DBConnectionString = "Data Source=isostore:/manga.sdf";
-
-        private const string _dataFileExt = ".data";
-        private const string _dataFilePattern = "*.data";
-        private const string _iconFileExt = ".ico";
-        private const string _serializedSeriesFile = "Series";
-        private const string _serializedLatestChaptersFile = "LatestChapters";
-        private const string _serializedChaptersInSeriesFile = "ChaptersInSeries";
-        private const string _serializedMangaFile = "Manga";
-
         private const string _savedCurrentlyViewingSeries = "CurrentSeries";
         private const string _savedCurrentlyViewingChapter = "CurrentChapter";
         private const string _savedCurrentlyViewingPage = "CurrentPage";
-
-        private const string _downloadPath = "shared\\transfers\\";
 
         // Retention periods
         private const int _oneWeekRetention = 7;
@@ -94,7 +73,7 @@ namespace MangaStream
 
             _backgroundTransfer = new BackgroundTransfer();
 
-            _mangaDB = new MangaDataContext(_DBConnectionString);
+            _mangaDB = new MangaDataContext(Constants._DBConnectionString);
             if (!_mangaDB.DatabaseExists())
             {
                 _mangaDB.CreateDatabase();
@@ -253,7 +232,7 @@ namespace MangaStream
             try
             {
                 IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication();
-                string[] dataFiles = store.GetFileNames(_dataFilePattern);
+                string[] dataFiles = store.GetFileNames(Constants._dataFilePattern);
 
                 string mangaId = null;
                 if (IsolatedStorageSettings.ApplicationSettings.Contains(_savedCurrentlyViewingChapter))
@@ -368,7 +347,7 @@ namespace MangaStream
                 {
                     try
                     {
-                        if (fileName.EndsWith(".img") || fileName.EndsWith(_iconFileExt) || fileName.EndsWith(".png"))
+                        if (fileName.EndsWith(".img") || fileName.EndsWith(Constants._iconFileExt) || fileName.EndsWith(".png"))
                         {
                             store.DeleteFile(fileName);
                         }
@@ -435,8 +414,8 @@ namespace MangaStream
             }
             if (!IsSeriesLoaded)
             {
-                string source = _serverUri + string.Format(_seriesRequestTemplate, _apiKey);
-                string destination = _downloadPath + _serializedSeriesFile + _dataFileExt;
+                string source = Constants._serverUri + string.Format(Constants._seriesRequestTemplate, Constants._apiKey);
+                string destination = Constants._downloadPath + Constants._serializedSeriesFile + Constants._dataFileExt;
 
                 _backgroundTransfer.QueueDownload(source, destination, null, new BackgroundTransfer.OnTransferCompleted(OnSeriesTransferCompleted));
             }
@@ -497,8 +476,8 @@ namespace MangaStream
             }
             if (!IsLatestChaptersLoaded)
             {
-                string source = _serverUri + string.Format(_latestRequestTemplate, _apiKey);
-                string destination = _downloadPath + _serializedLatestChaptersFile + _dataFileExt;
+                string source = Constants._serverUri + string.Format(Constants._latestRequestTemplate, Constants._apiKey);
+                string destination = Constants._downloadPath + Constants._serializedLatestChaptersFile + Constants._dataFileExt;
 
                 _backgroundTransfer.QueueDownload(source, destination, null, new BackgroundTransfer.OnTransferCompleted(OnLatestChaptersTransferCompleted));
             }
@@ -568,8 +547,8 @@ namespace MangaStream
             }
             if (!IsChaptersInSeriesLoaded)
             {
-                string source = _serverUri + string.Format(_chaptersRequestTemplate, _apiKey, _currentlyViewingSeries.SeriesId);
-                string destination = _downloadPath + _serializedChaptersInSeriesFile + _currentlyViewingSeries.SeriesId + _dataFileExt;
+                string source = Constants._serverUri + string.Format(Constants._chaptersRequestTemplate, Constants._apiKey, _currentlyViewingSeries.SeriesId);
+                string destination = Constants._downloadPath + Constants._serializedChaptersInSeriesFile + _currentlyViewingSeries.SeriesId + Constants._dataFileExt;
                 string tag = _currentlyViewingSeries.SeriesId;
 
                 _backgroundTransfer.QueueDownload(source, destination, tag, new BackgroundTransfer.OnTransferCompleted(OnChaptersInSeriesTransferCompleted));
@@ -638,8 +617,8 @@ namespace MangaStream
             }
             if (!IsChapterLoaded)
             {
-                string source = _serverUri + string.Format(_chapterRequestTemplate, _apiKey, _currentlyViewingChapter.MangaId);
-                string destination = _downloadPath + _serializedMangaFile + _currentlyViewingChapter.MangaId + _dataFileExt;
+                string source = Constants._serverUri + string.Format(Constants._chapterRequestTemplate, Constants._apiKey, _currentlyViewingChapter.MangaId);
+                string destination = Constants._downloadPath + Constants._serializedMangaFile + _currentlyViewingChapter.MangaId + Constants._dataFileExt;
                 string tag = _currentlyViewingChapter.MangaId;
 
                 _backgroundTransfer.QueueDownload(source, destination, tag, new BackgroundTransfer.OnTransferCompleted(OnChapterTransferCompleted));
@@ -743,7 +722,7 @@ namespace MangaStream
                             IsolatedStorageFileStream stream = null;
                             try
                             {
-                                stream = store.OpenFile(seriesId + _iconFileExt, FileMode.Open);
+                                stream = store.OpenFile(seriesId + Constants._iconFileExt, FileMode.Open);
 
                                 BitmapImage image = new BitmapImage();
                                 image.SetSource(stream);
@@ -878,7 +857,7 @@ namespace MangaStream
                             PageModel pageModel = pages[i];
                             ImageModel imageModel = pageModel.Images[j];
 
-                            pendingDownloadList.Add(new KeyValuePair<string, string>(imageModel.Url, _downloadPath + cachePath));           
+                            pendingDownloadList.Add(new KeyValuePair<string, string>(imageModel.Url, Constants._downloadPath + cachePath));           
                         }
                     }
                 }
@@ -946,7 +925,7 @@ namespace MangaStream
                 {
                     foreach (SeriesModel viewModel in group)
                     {
-                        string destination = _downloadPath + viewModel.SeriesId + _iconFileExt;
+                        string destination = Constants._downloadPath + viewModel.SeriesId + Constants._iconFileExt;
                         if (!store.FileExists(destination))
                         {
                             _backgroundTransfer.QueueDownload(viewModel.Icon, destination, viewModel.SeriesId, new BackgroundTransfer.OnTransferCompleted(OnIconTransferCompleted));

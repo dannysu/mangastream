@@ -43,6 +43,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Phone" />
+    <Reference Include="system.data.linq" />
     <Reference Include="System.Windows" />
     <Reference Include="system" />
     <Reference Include="System.Core" />
@@ -55,7 +56,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MangaStreamHelpers\MangaStreamCommon.csproj">
+    <ProjectReference Include="..\MangaStreamCommon\MangaStreamCommon.csproj">
       <Project>{349D1281-6F25-4DC4-97FB-5A89FAE793BF}</Project>
       <Name>MangaStreamCommon</Name>
     </ProjectReference>
