@@ -23,17 +23,30 @@ namespace MangaStream
     public class MainPageViewModel : ViewModelBase
     {
         private bool _multipleRefreshesInProgress;
+        private const string _twitterSource = "http://mobile.twitter.com/mangastream";
 
         public SeriesByName Series { get; private set; }
         public ObservableCollection<MangaAbstractModel> LatestChapters { get; private set; }
 
         public ICommand RefreshCommand { get; set; }
         public ICommand ClearCacheCommand { get; set; }
+        public ICommand SeriesTapCommand { get; set; }
+        public ICommand LatestChapterTapCommand { get; set; }
+
+        public string TwitterSource
+        {
+            get
+            {
+                return _twitterSource;
+            }
+        }
 
         public MainPageViewModel()
         {
-            RefreshCommand = new DelegateCommand(Refresh, CanRefresh);
-            ClearCacheCommand = new DelegateCommand(ClearCache, CanClearCache);
+            RefreshCommand = new DelegateCommand(Refresh, CanExecute);
+            ClearCacheCommand = new DelegateCommand(ClearCache, CanExecute);
+            SeriesTapCommand = new DelegateCommand(SeriesTap, CanExecute);
+            LatestChapterTapCommand = new DelegateCommand(LatestChapterTap, CanExecute);
 
             _multipleRefreshesInProgress = false;
         }
@@ -123,12 +136,9 @@ namespace MangaStream
             App.AppData.LoadSeriesAsync(true);
             App.AppData.LoadLatestChaptersAsync(true);
 
-            _multipleRefreshesInProgress = true;
-        }
+            NotifyPropertyChanged("TwitterSource");
 
-        public bool CanRefresh(object param)
-        {
-            return true;
+            _multipleRefreshesInProgress = true;
         }
 
         public void ClearCache(object param)
@@ -137,7 +147,35 @@ namespace MangaStream
             MessageBox.Show("Cleared cached images");
         }
 
-        public bool CanClearCache(object param)
+        public void SeriesTap(object param)
+        {
+            if (param == null)
+            {
+                return;
+            }
+
+            SeriesModel model = (SeriesModel)param;
+
+            OnSelectSeries(model);
+
+            NavigationService.Navigate("/ChaptersPage.xaml");
+        }
+
+        public void LatestChapterTap(object param)
+        {
+            if (param == null)
+            {
+                return;
+            }
+
+            MangaAbstractModel model = (MangaAbstractModel)param;
+            
+            OnSelectChapter(model);
+
+            NavigationService.Navigate("/ViewMangaPage.xaml");
+        }
+
+        public bool CanExecute(object param)
         {
             return true;
         }

@@ -16,13 +16,14 @@ namespace MangaStream
         public ObservableCollection<MangaAbstractModel> ChaptersInSeries { get; private set; }
 
         public string PivotHeader { get; private set; }
-        public string NavigateTarget { get; private set; }
 
         public ICommand RefreshCommand { get; set; }
+        public ICommand TapCommand { get; set; }
 
         public ChaptersPageViewModel()
         {
-            RefreshCommand = new DelegateCommand(Refresh, CanRefresh);
+            RefreshCommand = new DelegateCommand(Refresh, CanExecute);
+            TapCommand = new DelegateCommand(Tap, CanExecute);
 
             SetLoadingStatus(false);
         }
@@ -81,22 +82,21 @@ namespace MangaStream
             App.AppData.LoadChaptersInSeriesAsync(true);
         }
 
-        private bool CanRefresh(object param)
+        private void Tap(object param)
         {
-            return true;
+            if (param == null)
+            {
+                return;
+            }
+
+            OnSelectChapter((MangaAbstractModel)param);
+
+            NavigationService.Navigate("/ViewMangaPage.xaml");
         }
 
-        public void ListSelectionChanged(object sender, SelectionChangedEventArgs e)
+        private bool CanExecute(object param)
         {
-            ListBox list = (ListBox)sender;
-            if (e.AddedItems.Count == 1 && list.SelectedItem != null)
-            {
-                OnSelectChapter((MangaAbstractModel)list.SelectedItem);
-                list.SelectedItem = null;
-
-                NavigateTarget = "/ViewMangaPage.xaml";
-                NotifyPropertyChanged("NavigateTarget");
-            }
+            return true;
         }
 
         void OnDataLoaded(object sender, bool success)

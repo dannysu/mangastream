@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace MangaStream
 {
-    public class ViewModelBase : INotifyPropertyChanged
+    public class ViewModelBase : INotifyPropertyChanged, INavigable
     {
         public bool Loading { get; private set; }
 
@@ -12,6 +12,12 @@ namespace MangaStream
             Loading = status;
             NotifyPropertyChanged("Loading");
         }
+
+        #region INavigable Members
+
+        public INavigationService NavigationService { get; set; }
+
+        #endregion
 
         #region INotifyPropertyChanged Members
 

@@ -19,6 +19,7 @@
     SupportedOrientations="Portrait"  Orientation="Portrait"
     shell:SystemTray.IsVisible="False"
     toolkit:TiltEffect.IsTiltEnabled="True"
+    me:Navigator.Source="{Binding}"
     SizeChanged="PhoneApplicationPage_SizeChanged">
 
     <UserControl.DataContext>
@@ -63,7 +64,7 @@
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
         <!--Pivot Control-->
-        <controls:Pivot Title="MANGASTREAM" x:Name="Pivot" SelectionChanged="Pivot_SelectionChanged" IsHitTestVisible="{Binding Loading, Converter={StaticResource inverseBoolean}}">
+        <controls:Pivot Title="MANGASTREAM" x:Name="Pivot" IsHitTestVisible="{Binding Loading, Converter={StaticResource inverseBoolean}}">
             <!--Pivot item one-->
             <controls:PivotItem Header="series">
 
@@ -71,8 +72,13 @@
                                           Background="Transparent"
                                           Margin="10,0,-12,0" 
                                           ItemsSource="{Binding Series}"
-                                          IsHitTestVisible="{Binding Loading, Converter={StaticResource inverseBoolean}}"
-                                          SelectionChanged="FirstListBox_SelectionChanged">
+                                          IsHitTestVisible="{Binding Loading, Converter={StaticResource inverseBoolean}}">
+
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Tap">
+                            <i:InvokeCommandAction Command="{Binding SeriesTapCommand}" CommandParameter="{Binding ElementName=FirstListBox, Path=SelectedItem}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
 
                     <toolkit:LongListSelector.GroupItemsPanel>
                         <ItemsPanelTemplate>
@@ -123,28 +129,34 @@
             <!--Pivot item two-->
             <controls:PivotItem Header="latest">
                 <!--Triple line list no text wrapping-->
-                <ListBox x:Name="SecondListBox" Margin="0,0,-12,0" ItemsSource="{Binding LatestChapters}" IsHitTestVisible="{Binding Loading, Converter={StaticResource inverseBoolean}}" SelectionChanged="SecondListBox_SelectionChanged">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Margin="0,0,0,17">
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding SeriesName}" TextWrapping="NoWrap" Margin="12,0,0,0" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
-                                        <TextBlock Text="{Binding Chapter}" TextWrapping="NoWrap" Margin="12,0,0,0" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="Chapter" TextWrapping="NoWrap" Margin="12,-6,-5,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
-                                        <TextBlock Text="{Binding Chapter}" TextWrapping="NoWrap" Margin="12,-6,-5,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
-                                        <TextBlock Text="-" TextWrapping="NoWrap" Margin="12,-6,-5,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
-                                        <TextBlock Text="{Binding Title}" TextWrapping="NoWrap" Margin="12,-6,-5,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
-                                    </StackPanel>
+                <ListBox x:Name="SecondListBox" Margin="0,0,-12,0" ItemsSource="{Binding LatestChapters}" IsHitTestVisible="{Binding Loading, Converter={StaticResource inverseBoolean}}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="0,0,0,17">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding SeriesName}" TextWrapping="NoWrap" Margin="12,0,0,0" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+                                    <TextBlock Text="{Binding Chapter}" TextWrapping="NoWrap" Margin="12,0,0,0" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
                                 </StackPanel>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Chapter" TextWrapping="NoWrap" Margin="12,-6,-5,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                    <TextBlock Text="{Binding Chapter}" TextWrapping="NoWrap" Margin="12,-6,-5,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                    <TextBlock Text="-" TextWrapping="NoWrap" Margin="12,-6,-5,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                    <TextBlock Text="{Binding Title}" TextWrapping="NoWrap" Margin="12,-6,-5,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Tap">
+                            <i:InvokeCommandAction Command="{Binding LatestChapterTapCommand}" CommandParameter="{Binding ElementName=SecondListBox, Path=SelectedItem}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </ListBox>
             </controls:PivotItem>
 
             <controls:PivotItem Header="twitter">
-                <phone:WebBrowser HorizontalAlignment="Left" Name="webBrowser1" VerticalAlignment="Top" Source="http://mobile.twitter.com/mangastream"/>
+                <phone:WebBrowser HorizontalAlignment="Left" Name="webBrowser1" VerticalAlignment="Top" Source="{Binding TwitterSource}"/>
             </controls:PivotItem>
         </controls:Pivot>
 

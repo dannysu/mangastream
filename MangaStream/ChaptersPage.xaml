@@ -15,6 +15,7 @@
     SupportedOrientations="Portrait" Orientation="Portrait"
     mc:Ignorable="d" d:DesignHeight="728" d:DesignWidth="480"
     shell:SystemTray.IsVisible="False"
+    me:Navigator.Source="{Binding}"
     toolkit:TiltEffect.IsTiltEnabled="True">
 
     <phone:PhoneApplicationPage.DataContext>
@@ -85,8 +86,8 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 	<i:Interaction.Triggers>
-                		<i:EventTrigger EventName="SelectionChanged">
-                			<ec:CallMethodAction TargetObject="{Binding Mode=OneWay}" MethodName="ListSelectionChanged"/>
+                		<i:EventTrigger EventName="Tap">
+                            <i:InvokeCommandAction Command="{Binding TapCommand}" CommandParameter="{Binding ElementName=ListBox, Path=SelectedItem}"/>
                 		</i:EventTrigger>
                 	</i:Interaction.Triggers>
                 </ListBox>

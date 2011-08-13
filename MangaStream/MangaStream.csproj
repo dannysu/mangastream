@@ -84,6 +84,10 @@
     <Compile Include="Converters\InverseBooleanConverter.cs" />
     <Compile Include="Helpers\BackgroundTransfer.cs" />
     <Compile Include="Helpers\DelegateCommand.cs" />
+    <Compile Include="Helpers\NavigationService.cs" />
+    <Compile Include="Helpers\Navigator.cs" />
+    <Compile Include="Interfaces\INavigable.cs" />
+    <Compile Include="Interfaces\INavigationService.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>

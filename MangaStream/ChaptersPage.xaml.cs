@@ -18,16 +18,6 @@ namespace MangaStream
         public ChaptersPage()
         {
             InitializeComponent();
-
-            ((ChaptersPageViewModel)DataContext).PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(ChaptersPage_PropertyChanged);
-        }
-
-        void ChaptersPage_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName.Equals("NavigateTarget"))
-            {
-                NavigationService.Navigate(new Uri(((ChaptersPageViewModel)DataContext).NavigateTarget, UriKind.Relative));
-            }
         }
     }
 }
