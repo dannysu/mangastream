@@ -20,6 +20,7 @@ using Microsoft.Phone.BackgroundTransfer;
 using System.Linq;
 using System.Data.Linq;
 using System.Data.Linq.Mapping;
+using MangaStreamCommon;
 
 namespace MangaStream
 {

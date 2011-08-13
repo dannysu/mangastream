@@ -3,6 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010 Express for Windows Phone
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MangaStream", "MangaStream\MangaStream.csproj", "{2D962812-5185-462E-8FC8-99700A1E3DEF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MangaStreamAgent", "MangaStreamAgent\MangaStreamAgent.csproj", "{F03A918B-929E-45D7-9D0D-A5CBD7FDDE9F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MangaStreamCommon", "MangaStreamCommon\MangaStreamCommon.csproj", "{349D1281-6F25-4DC4-97FB-5A89FAE793BF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{2D962812-5185-462E-8FC8-99700A1E3DEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D962812-5185-462E-8FC8-99700A1E3DEF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2D962812-5185-462E-8FC8-99700A1E3DEF}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{F03A918B-929E-45D7-9D0D-A5CBD7FDDE9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F03A918B-929E-45D7-9D0D-A5CBD7FDDE9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F03A918B-929E-45D7-9D0D-A5CBD7FDDE9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F03A918B-929E-45D7-9D0D-A5CBD7FDDE9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{349D1281-6F25-4DC4-97FB-5A89FAE793BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{349D1281-6F25-4DC4-97FB-5A89FAE793BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{349D1281-6F25-4DC4-97FB-5A89FAE793BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{349D1281-6F25-4DC4-97FB-5A89FAE793BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

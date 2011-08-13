@@ -17,6 +17,7 @@ using System.Net;
 using System.Windows.Threading;
 using Newtonsoft.Json;
 using System.IO.IsolatedStorage;
+using Microsoft.Phone.Scheduler;
 
 namespace MangaStream
 {
@@ -24,6 +25,8 @@ namespace MangaStream
     {
         private bool _multipleRefreshesInProgress;
         private const string _twitterSource = "http://mobile.twitter.com/mangastream";
+        private const string _taskName = "MangaStream Update Agent";
+        private const string _taskDescription = "Checks for new manga from MangaStream";
 
         public SeriesByName Series { get; private set; }
         public ObservableCollection<MangaAbstractModel> LatestChapters { get; private set; }
@@ -49,6 +52,26 @@ namespace MangaStream
             LatestChapterTapCommand = new DelegateCommand(LatestChapterTap, CanExecute);
 
             _multipleRefreshesInProgress = false;
+        }
+
+        private void StartAgent()
+        {
+            ResourceIntensiveTask task = ScheduledActionService.Find(_taskName) as ResourceIntensiveTask;
+
+            if (task != null && !task.IsEnabled)
+            {
+                // Background agent disabled by user
+                return;
+            }
+
+            if (task != null && task.IsEnabled)
+            {
+                ScheduledActionService.Remove(_taskName);
+            }
+
+            task = new ResourceIntensiveTask(_taskName);
+            task.Description = _taskDescription;
+            ScheduledActionService.Add(task);
         }
 
         public void OnLoaded()

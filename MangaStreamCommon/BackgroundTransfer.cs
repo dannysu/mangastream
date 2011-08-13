@@ -11,7 +11,7 @@ using System.Windows.Shapes;
 using System.Collections.Generic;
 using Microsoft.Phone.BackgroundTransfer;
 
-namespace MangaStream
+namespace MangaStreamCommon
 {
     public class BackgroundTransfer
     {
