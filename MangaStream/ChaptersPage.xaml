@@ -30,6 +30,7 @@
 
     <phone:PhoneApplicationPage.Resources>
         <me:BooleanToVisibilityConverter x:Key="boolToVisiblityConverter"/>
+        <me:InverseBooleanConverter x:Key="inverseBoolean"/>
     </phone:PhoneApplicationPage.Resources>
 
 	<phone:PhoneApplicationPage.FontFamily>
@@ -71,7 +72,7 @@
             <!--Pivot item two-->
             <controls:PivotItem x:Name="PivotItem" Header="{Binding PivotHeader}">
                 <!--Triple line list no text wrapping-->
-                <ListBox x:Name="ListBox" Margin="0,0,-12,0" ItemsSource="{Binding ChaptersInSeries}">
+                <ListBox x:Name="ListBox" Margin="0,0,-12,0" ItemsSource="{Binding ChaptersInSeries}" IsHitTestVisible="{Binding Loading, Converter={StaticResource inverseBoolean}}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Margin="0,0,0,17">

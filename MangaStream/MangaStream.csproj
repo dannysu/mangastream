@@ -81,6 +81,7 @@
     </Compile>
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\IntegerConverter.cs" />
+    <Compile Include="Converters\InverseBooleanConverter.cs" />
     <Compile Include="Helpers\BackgroundTransfer.cs" />
     <Compile Include="Helpers\DelegateCommand.cs" />
     <Compile Include="MainPage.xaml.cs">

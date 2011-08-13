@@ -57,12 +57,13 @@
         <me:GroupToBackgroundBrushValueConverter x:Key="groupBackgroundBrush"/>
         <me:GroupToForegroundBrushValueConverter x:Key="groupForegroundBrush"/>
         <me:BooleanToVisibilityConverter x:Key="boolToVisiblityConverter"/>
+        <me:InverseBooleanConverter x:Key="inverseBoolean"/>
     </phone:PhoneApplicationPage.Resources>
 
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
         <!--Pivot Control-->
-        <controls:Pivot Title="MANGASTREAM" x:Name="Pivot" SelectionChanged="Pivot_SelectionChanged">
+        <controls:Pivot Title="MANGASTREAM" x:Name="Pivot" SelectionChanged="Pivot_SelectionChanged" IsHitTestVisible="{Binding Loading, Converter={StaticResource inverseBoolean}}">
             <!--Pivot item one-->
             <controls:PivotItem Header="series">
 
@@ -70,6 +71,7 @@
                                           Background="Transparent"
                                           Margin="10,0,-12,0" 
                                           ItemsSource="{Binding Series}"
+                                          IsHitTestVisible="{Binding Loading, Converter={StaticResource inverseBoolean}}"
                                           SelectionChanged="FirstListBox_SelectionChanged">
 
                     <toolkit:LongListSelector.GroupItemsPanel>
@@ -121,7 +123,7 @@
             <!--Pivot item two-->
             <controls:PivotItem Header="latest">
                 <!--Triple line list no text wrapping-->
-                    <ListBox x:Name="SecondListBox" Margin="0,0,-12,0" ItemsSource="{Binding LatestChapters}" SelectionChanged="SecondListBox_SelectionChanged">
+                <ListBox x:Name="SecondListBox" Margin="0,0,-12,0" ItemsSource="{Binding LatestChapters}" IsHitTestVisible="{Binding Loading, Converter={StaticResource inverseBoolean}}" SelectionChanged="SecondListBox_SelectionChanged">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Margin="0,0,0,17">
