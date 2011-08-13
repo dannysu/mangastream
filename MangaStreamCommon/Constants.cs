@@ -24,6 +24,9 @@ namespace MangaStreamCommon
         public const string _serializedChaptersInSeriesFile = "ChaptersInSeries";
         public const string _serializedMangaFile = "Manga";
 
+        // Settings keys
+        public const string _latestMangaId = "LatestMangaId";
+
         public const string _downloadPath = "shared\\transfers\\";
     }
 }

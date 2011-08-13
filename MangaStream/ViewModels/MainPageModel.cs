@@ -14,10 +14,12 @@ using System.Windows.Shapes;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Net;
+using System.Linq;
 using System.Windows.Threading;
 using Newtonsoft.Json;
 using System.IO.IsolatedStorage;
 using Microsoft.Phone.Scheduler;
+using Microsoft.Phone.Shell;
 using MangaStreamCommon;
 
 namespace MangaStream
@@ -37,6 +39,8 @@ namespace MangaStream
         public ICommand SeriesTapCommand { get; set; }
         public ICommand LatestChapterTapCommand { get; set; }
 
+        private ResourceIntensiveTask resourceIntensiveTask;
+
         public string TwitterSource
         {
             get
@@ -55,29 +59,64 @@ namespace MangaStream
             _multipleRefreshesInProgress = false;
         }
 
-        private void StartAgent()
+        private void StartResourceIntensiveAgent()
         {
-            ResourceIntensiveTask task = ScheduledActionService.Find(_taskName) as ResourceIntensiveTask;
+            resourceIntensiveTask = ScheduledActionService.Find(_taskName) as ResourceIntensiveTask;
 
-            if (task != null && !task.IsEnabled)
+            // If the task already exists and the IsEnabled property is false, background
+            // agents have been disabled by the user
+            if (resourceIntensiveTask != null && !resourceIntensiveTask.IsEnabled)
             {
-                // Background agent disabled by user
                 return;
             }
 
-            if (task != null && task.IsEnabled)
+            // If the task already exists and background agents are enabled for the
+            // application, you must remove the task and then add it again to update 
+            // the schedule
+            if (resourceIntensiveTask != null && resourceIntensiveTask.IsEnabled)
             {
-                ScheduledActionService.Remove(_taskName);
+                RemoveAgent(_taskName);
             }
 
-            task = new ResourceIntensiveTask(_taskName);
-            task.Description = _taskDescription;
-            ScheduledActionService.Add(task);
+            resourceIntensiveTask = new ResourceIntensiveTask(_taskName);
+            // The description is required for periodic agents. This is the string that the user
+            // will see in the background services Settings page on the device.
+
+            resourceIntensiveTask.Description = _taskDescription;
+            ScheduledActionService.Add(resourceIntensiveTask);
+        }
+
+        private void RemoveAgent(string name)
+        {
+            try
+            {
+                ScheduledActionService.Remove(name);
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        private void RemoveTileNotification()
+        {
+            ShellTile appTile = ShellTile.ActiveTiles.First();
+            if (appTile != null)
+            {
+                StandardTileData tileData = new StandardTileData();
+                tileData.BackTitle = string.Empty;
+                tileData.BackContent = string.Empty;
+
+                appTile.Update(tileData);
+            }
         }
 
         public void OnLoaded()
         {
             SetLoadingStatus(true);
+
+            StartResourceIntensiveAgent();
+
+            RemoveTileNotification();
 
             App.AppData.Events = new AppDataEvents();
             App.AppData.Events.DataLoaded += new AppDataEvents.DataLoadedEventHandler(OnDataLoaded);

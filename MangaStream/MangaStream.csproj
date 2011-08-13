@@ -156,6 +156,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MangaStreamAgent\MangaStreamAgent.csproj">
+      <Project>{F03A918B-929E-45D7-9D0D-A5CBD7FDDE9F}</Project>
+      <Name>MangaStreamAgent</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MangaStreamCommon\MangaStreamCommon.csproj">
       <Project>{349D1281-6F25-4DC4-97FB-5A89FAE793BF}</Project>
       <Name>MangaStreamCommon</Name>
