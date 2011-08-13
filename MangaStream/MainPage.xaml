@@ -19,8 +19,7 @@
     SupportedOrientations="Portrait"  Orientation="Portrait"
     shell:SystemTray.IsVisible="False"
     toolkit:TiltEffect.IsTiltEnabled="True"
-    me:Navigator.Source="{Binding}"
-    SizeChanged="PhoneApplicationPage_SizeChanged">
+    me:Navigator.Source="{Binding}">
 
     <UserControl.DataContext>
         <me:MainPageViewModel/>
@@ -156,7 +155,7 @@
             </controls:PivotItem>
 
             <controls:PivotItem Header="twitter">
-                <phone:WebBrowser HorizontalAlignment="Left" Name="webBrowser1" VerticalAlignment="Top" Source="{Binding TwitterSource}"/>
+                <phone:WebBrowser HorizontalAlignment="Left" Name="webBrowser1" VerticalAlignment="Top" Height="{Binding ElementName=SecondListBox, Path=RenderSize.Height}" Width="{Binding ElementName=SecondListBox, Path=RenderSize.Width}" Source="{Binding TwitterSource}"/>
             </controls:PivotItem>
         </controls:Pivot>
 

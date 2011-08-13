@@ -20,12 +20,5 @@ namespace MangaStream
         {
             InitializeComponent();
         }
-
-        private void PhoneApplicationPage_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            // TODO: Are there ways to know exactly what the margins and header sizes are?
-            webBrowser1.Width = e.NewSize.Width - 24;
-            webBrowser1.Height = e.NewSize.Height - 150;
-        }
     }
 }
