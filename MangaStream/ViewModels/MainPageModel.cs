@@ -27,7 +27,6 @@ namespace MangaStream
     public class MainPageViewModel : ViewModelBase
     {
         private bool _multipleRefreshesInProgress;
-        private const string _twitterSource = "http://mobile.twitter.com/mangastream";
         private const string _taskName = "MangaStream Update Agent";
         private const string _taskDescription = "Checks for new manga from MangaStream";
 
@@ -40,14 +39,6 @@ namespace MangaStream
         public ICommand LatestChapterTapCommand { get; set; }
 
         private ResourceIntensiveTask resourceIntensiveTask;
-
-        public string TwitterSource
-        {
-            get
-            {
-                return _twitterSource;
-            }
-        }
 
         public MainPageViewModel()
         {
