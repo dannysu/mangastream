@@ -96,6 +96,7 @@ namespace MangaStream
                 StandardTileData tileData = new StandardTileData();
                 tileData.BackTitle = string.Empty;
                 tileData.BackContent = string.Empty;
+                tileData.Count = 0;
 
                 appTile.Update(tileData);
             }

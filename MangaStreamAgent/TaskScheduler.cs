@@ -80,13 +80,33 @@ namespace MangaStreamAgent
 
                 if (latestChapters.Count > 0)
                 {
-                    if (!IsolatedStorageSettings.ApplicationSettings.Contains(Constants._latestMangaId) ||
-                        !latestChapters[0].MangaId.Equals((string)IsolatedStorageSettings.ApplicationSettings[Constants._latestMangaId]))
+                    string oldMangaId = string.Empty;
+                    if (IsolatedStorageSettings.ApplicationSettings.Contains(Constants._latestMangaId))
                     {
+                        oldMangaId = (string)IsolatedStorageSettings.ApplicationSettings[Constants._latestMangaId];
+                    }
+
+                    if (!oldMangaId.Equals(latestChapters[0].MangaId))
+                    {
+                        int releaseCount = 0;
+
+                        // Figure out how many new releases there are
+                        foreach (MangaAbstractModel model in latestChapters)
+                        {
+                            if (model.MangaId.Equals(oldMangaId))
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                releaseCount++;
+                            }
+                        }
+
                         // Launch a toast to show that the agent is running.
                         // The toast will not be shown if the foreground application is running.
                         ShellToast toast = new ShellToast();
-                        toast.Title = "New manga release";
+                        toast.Title = releaseCount > 1 ? "New manga releases" : "New manga release";
                         toast.Content = "";
                         toast.Show();
 
@@ -95,13 +115,15 @@ namespace MangaStreamAgent
                         {
                             StandardTileData tileData = new StandardTileData();
                             tileData.BackTitle = "MangaStream";
-                            tileData.BackContent = "New manga release";
+                            tileData.BackContent = releaseCount > 1 ? "New manga releases" : "New manga release";
+                            tileData.Count = releaseCount;
 
                             appTile.Update(tileData);
                         }
                     }
 
                     IsolatedStorageSettings.ApplicationSettings[Constants._latestMangaId] = latestChapters[0].MangaId;
+                    IsolatedStorageSettings.ApplicationSettings.Save();
                 }
             }
             catch (Exception)
