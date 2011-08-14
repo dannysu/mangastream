@@ -81,7 +81,9 @@
     </Compile>
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\InverseBooleanConverter.cs" />
+    <Compile Include="Converters\ValueWithOffsetConverter.cs" />
     <Compile Include="Helpers\DelegateCommand.cs" />
+    <Compile Include="Helpers\InvokeDelegateCommandAction.cs" />
     <Compile Include="Helpers\NavigationService.cs" />
     <Compile Include="Helpers\Navigator.cs" />
     <Compile Include="Interfaces\INavigable.cs" />

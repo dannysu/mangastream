@@ -18,6 +18,7 @@ using System.Windows.Threading;
 using Newtonsoft.Json;
 using System.IO.IsolatedStorage;
 using Microsoft.Phone.Shell;
+using Microsoft.Phone.Controls;
 using MangaStreamCommon;
 
 namespace MangaStream
@@ -46,8 +47,32 @@ namespace MangaStream
     {
         private int _currentViewingPage;
 
+        public bool JumpToPageOverlayVisible { get; private set; }
+        public bool PreviousAllowed { get; private set; }
+        public bool NextAllowed { get; private set; }
+        public string DisplayContent { get; private set; }
+        public ObservableCollection<PageSelectionModel> Pages { get; private set; }
+
+        public ICommand BackCommand { get; set; }
+        public ICommand PreviousCommand { get; set; }
+        public ICommand NextCommand { get; set; }
+        public ICommand RefreshCommand { get; set; }
+        public ICommand JumpToPageCommand { get; set; }
+        public ICommand DownloadAllCommand { get; set; }
+
+        public ICommand TapCommand { get; set; }
+
         public ViewMangaPageModel()
         {
+            BackCommand = new DelegateCommand(OnBackKeyPress, CanExecute);
+            PreviousCommand = new DelegateCommand(OnPreviousClicked, CanExecute);
+            NextCommand = new DelegateCommand(OnNextClicked, CanExecute);
+            RefreshCommand = new DelegateCommand(OnRefresh, CanExecute);
+            JumpToPageCommand = new DelegateCommand(OnJumpToPage, CanExecute);
+            DownloadAllCommand = new DelegateCommand(OnDownloadAll, CanExecute);
+
+            TapCommand = new DelegateCommand(OnListTap, CanExecute);
+
             SetLoadingStatus(false);
 
             _currentViewingPage = 0;
@@ -62,22 +87,16 @@ namespace MangaStream
             App.AppData.Events.GetAllPagesAsyncCompleted += new AppDataEvents.GetAllPagesAsyncCompletedEventHandler(OnGetAllPagesAsyncCompleted);
         }
 
-        public bool ShowJumpToPageOverlay { get; private set; }
-        public bool PreviousAllowed { get; private set; }
-        public bool NextAllowed { get; private set; }
-        public string DisplayContent { get; private set; }
-        public ObservableCollection<PageSelectionModel> Pages { get; private set; }
-
         public void OnLoaded()
         {
             SetLoadingStatus(true);
 
-            ShowJumpToPageOverlay = false;
+            JumpToPageOverlayVisible = false;
+            NotifyPropertyChanged("JumpToPageOverlayVisible");
+
             _currentViewingPage = 0;
             PreviousAllowed = false;
             NextAllowed = false;
-
-            Pages.Clear();
 
             App.AppData.Events = new AppDataEvents();
             App.AppData.Events.DataLoaded += new AppDataEvents.DataLoadedEventHandler(OnDataLoaded);
@@ -103,16 +122,24 @@ namespace MangaStream
                     }
                 }
 
-                InitializePages();
-
                 SetLoadingStatus(false);
             }
 
             LoadPage(_currentViewingPage, false);
         }
 
-        public void OnBackKeyPress()
+        public void OnBackKeyPress(object param)
         {
+            if (JumpToPageOverlayVisible)
+            {
+                HideJumpToPageOverlay(new EventHandler(DoNothingEventHandler));
+
+                System.ComponentModel.CancelEventArgs e = (System.ComponentModel.CancelEventArgs)param;
+                if (e != null)
+                {
+                    e.Cancel = true;
+                }
+            }
         }
 
         private void InitializePages()
@@ -128,9 +155,17 @@ namespace MangaStream
             }
         }
 
-        public void OnPreviousClicked()
+        public void OnPreviousClicked(object param)
         {
-            if (App.AppData.Manga == null || Loading)
+            if (!Loading)
+            {
+                HideJumpToPageOverlay(new EventHandler(DoPrevious));
+            }
+        }
+
+        private void DoPrevious(object sender, EventArgs e)
+        {
+            if (App.AppData.Manga == null)
             {
                 return;
             }
@@ -143,9 +178,17 @@ namespace MangaStream
             }
         }
 
-        public void OnNextClicked()
+        public void OnNextClicked(object param)
         {
-            if (App.AppData.Manga == null || Loading)
+            if (!Loading)
+            {
+                HideJumpToPageOverlay(new EventHandler(DoNext));
+            }
+        }
+
+        private void DoNext(object sender, EventArgs e)
+        {
+            if (App.AppData.Manga == null)
             {
                 return;
             }
@@ -173,20 +216,36 @@ namespace MangaStream
             }
         }
 
-        public void OnRefresh()
+        public void OnRefresh(object param)
         {
-            if (Loading)
+            if (!Loading)
             {
-                return;
+                HideJumpToPageOverlay(new EventHandler(DoRefresh));
             }
+        }
 
+        private void DoRefresh(object sender, EventArgs e)
+        {
             SetLoadingStatus(true);
             App.AppData.LoadChapterAsync(true);
         }
 
-        public void OnDownloadAll()
+        public void OnJumpToPage(object param)
         {
-            if (App.AppData.Manga == null || Loading)
+            ShowJumpToPageOverlay();
+        }
+
+        public void OnDownloadAll(object param)
+        {
+            if (!Loading)
+            {
+                HideJumpToPageOverlay(new EventHandler(DoDownloadAll));
+            }
+        }
+
+        private void DoDownloadAll(object sender, EventArgs e)
+        {
+            if (App.AppData.Manga == null)
             {
                 return;
             }
@@ -212,6 +271,22 @@ namespace MangaStream
             App.AppData.LoadAllPagesAsync(manga.Pages, cachePaths);
 
             PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
+        }
+
+        public void OnListTap(object param)
+        {
+            if (param == null)
+            {
+                return;
+            }
+
+            int index = (int)param;
+            HideJumpToPageOverlayAfterSelection(index);
+        }
+
+        private bool CanExecute(object param)
+        {
+            return true;
         }
 
         void OnDataLoaded(object sender, bool success)
@@ -319,8 +394,9 @@ namespace MangaStream
                 }
                 else
                 {
-                    DisplayContent = "Couldn't display content";
+                    // Couldn't display content
                 }
+                DisplayContent = "index.html";
                 NotifyPropertyChanged("DisplayContent");
             }
             else
@@ -346,6 +422,39 @@ namespace MangaStream
             NotifyPropertyChanged("DoneLoading");
             PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Enabled;
             SetLoadingStatus(false);
+        }
+
+        // TODO: Figure out how to hook up show/hide transition in View/XAML
+        private void ShowJumpToPageOverlay()
+        {
+            InitializePages();
+
+            JumpToPageOverlayVisible = true;
+            NotifyPropertyChanged("JumpToPageOverlayVisible");
+        }
+
+        // TODO: Figure out how to hook up show/hide transition in View/XAML
+        private void HideJumpToPageOverlay(EventHandler eventHandler)
+        {
+            JumpToPageOverlayVisible = false;
+            NotifyPropertyChanged("JumpToPageOverlayVisible");
+            eventHandler.Invoke(this, new EventArgs());
+
+            Pages.Clear();
+        }
+
+        // TODO: Figure out how to hook up show/hide transition in View/XAML
+        private void HideJumpToPageOverlayAfterSelection(int index)
+        {
+            JumpToPageOverlayVisible = false;
+            NotifyPropertyChanged("JumpToPageOverlayVisible");
+            JumpToPage(index);
+
+            Pages.Clear();
+        }
+
+        private void DoNothingEventHandler(object sender, EventArgs e)
+        {
         }
 
         private string GetCachePath(MangaModel mangaModel, PageModel pageModel, int count)

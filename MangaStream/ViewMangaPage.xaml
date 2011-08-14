@@ -10,19 +10,18 @@
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
     xmlns:ec="clr-namespace:Microsoft.Expression.Interactivity.Core;assembly=Microsoft.Expression.Interactions" 
+    xmlns:bab="clr-namespace:Phone7.Fx.Preview;assembly=Phone7.Fx.Preview"
     xmlns:me="clr-namespace:MangaStream"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
-    SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
+    SupportedOrientations="Portrait" Orientation="Portrait"
     mc:Ignorable="d" d:DesignHeight="800" d:DesignWidth="480"
     shell:SystemTray.IsVisible="False"
-    toolkit:TiltEffect.IsTiltEnabled="True"
-    SizeChanged="ViewMangaPage_SizeChanged"
-    BackKeyPress="ViewMangaPage_BackKeyPress">
+    toolkit:TiltEffect.IsTiltEnabled="True">
 
     <UserControl.DataContext>
-        <me:ViewMangaPageModel PropertyChanged="ViewMangaPage_PropertyChanged"/>
+        <me:ViewMangaPageModel/>
     </UserControl.DataContext>
 
     <!-- Hook up Loaded event to ViewModel -->
@@ -30,10 +29,14 @@
         <i:EventTrigger EventName="Loaded">
             <ec:CallMethodAction TargetObject="{Binding Mode=OneWay}" MethodName="OnLoaded"/>
         </i:EventTrigger>
+        <i:EventTrigger EventName="BackKeyPress">
+            <me:InvokeDelegateCommandAction Command="{Binding BackCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=InvokeParameter}"/>
+        </i:EventTrigger>
     </i:Interaction.Triggers>
 
     <phone:PhoneApplicationPage.Resources>
         <me:BooleanToVisibilityConverter x:Key="boolToVisiblityConverter"/>
+        <me:ValueWithOffsetConverter x:Key="valueWithOffsetConverter"/>
     </phone:PhoneApplicationPage.Resources>
 
     <toolkit:TransitionService.NavigationInTransition>
@@ -58,27 +61,43 @@
     </toolkit:TransitionService.NavigationOutTransition>
     
     <Canvas x:Name="LayoutRoot" Background="Transparent">
-        <phone:WebBrowser Canvas.ZIndex="1" HorizontalAlignment="Left" Name="webBrowser" VerticalAlignment="Top" Height="{Binding ActualHeight, ElementName=LayoutRoot}" Width="{Binding ActualWidth, ElementName=LayoutRoot}"/>
+        <phone:WebBrowser Name="webBrowser"
+                          Canvas.ZIndex="1"
+                          HorizontalAlignment="Left"
+                          VerticalAlignment="Top"
+                          Source="{Binding DisplayContent}"
+                          Height="{Binding ElementName=LayoutRoot, Path=ActualHeight, Converter={StaticResource valueWithOffsetConverter}, ConverterParameter=-74}"
+                          Width="{Binding ElementName=LayoutRoot, Path=ActualWidth}"/>
 
-        <!-- Visibility="{Binding ShowJumpToPageOverlay, Converter={StaticResource boolToVisiblityConverter}}" -->
-        <Canvas x:Name="JumpToPageOverlay" Canvas.ZIndex="2" Height="{Binding ActualHeight, ElementName=LayoutRoot}" Width="{Binding ActualWidth, ElementName=LayoutRoot}">
-            <controls:Pivot Title="CHOOSE A PAGE" x:Name="Pivot" FontWeight="Bold" Background="{StaticResource PhoneBackgroundBrush}">
-                <!--Pivot item two-->
-                <controls:PivotItem x:Name="PivotItem" Header="">
-                    <ListBox x:Name="ListBox" Margin="0,0,-12,0" ItemsSource="{Binding Pages}" SelectionChanged="ListBox_SelectionChanged" Height="{Binding ActualHeight, ElementName=LayoutRoot}" Width="{Binding ActualWidth, ElementName=LayoutRoot}">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Margin="0,0,0,17">
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="Page" TextWrapping="NoWrap" Margin="12,0,0,0" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
-                                        <TextBlock Text="{Binding PageNumber}" TextWrapping="NoWrap" Margin="12,0,0,0" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
-                                    </StackPanel>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </controls:PivotItem>
-            </controls:Pivot>
+        <Canvas x:Name="JumpToPageOverlay"
+                Canvas.ZIndex="2"
+                Background="{StaticResource PhoneBackgroundBrush}"
+                Height="{Binding ElementName=LayoutRoot, Path=ActualHeight, Converter={StaticResource valueWithOffsetConverter}, ConverterParameter=-74}"
+                Width="{Binding ElementName=LayoutRoot, Path=ActualWidth}"
+                Visibility="{Binding JumpToPageOverlayVisible, Converter={StaticResource boolToVisiblityConverter}}">
+            <ListBox x:Name="ListBox"
+                     Margin="0,0,-12,0"
+                     ItemsSource="{Binding Pages}"
+                     Background="{StaticResource PhoneBackgroundBrush}"
+                     Height="{Binding ElementName=LayoutRoot, Path=ActualHeight, Converter={StaticResource valueWithOffsetConverter}, ConverterParameter=-74}"
+                     Width="{Binding ElementName=LayoutRoot, Path=ActualWidth}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="0,0,0,17">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Page" TextWrapping="NoWrap" Margin="12,0,0,0" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+                                <TextBlock Text="{Binding PageNumber}" TextWrapping="NoWrap" Margin="12,0,0,0" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Tap">
+                        <i:InvokeCommandAction Command="{Binding TapCommand}" CommandParameter="{Binding ElementName=ListBox, Path=SelectedIndex}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ListBox>
         </Canvas>
 
         <Canvas x:Name="LoadingOverlay" Canvas.ZIndex="3" MinHeight="0" MinWidth="0" Height="{Binding ActualHeight, ElementName=LayoutRoot}" Width="{Binding ActualWidth, ElementName=LayoutRoot}" Visibility="{Binding Loading, Converter={StaticResource boolToVisiblityConverter}}">
@@ -89,18 +108,14 @@
                 <toolkit:PerformanceProgressBar Name="ProgressIndicator" IsIndeterminate="{Binding Loading}" VerticalAlignment="Center" Background="Transparent" Width="{Binding ActualWidth, ElementName=LayoutRoot}"/>
             </Grid>
         </Canvas>
+        
+        <bab:BindableApplicationBar>
+            <bab:BindableApplicationBarIconButton IconUri="/Images/appbar.previous.png" Text="previous" IsEnabled="{Binding PreviousAllowed}" Command="{Binding PreviousCommand}"/>
+            <bab:BindableApplicationBarIconButton IconUri="/Images/appbar.next.png" Text="next" IsEnabled="{Binding NextAllowed}" Command="{Binding NextCommand}"/>
+            <bab:BindableApplicationBarMenuItem Text="download all pages" Command="{Binding DownloadAllCommand}"/>
+            <bab:BindableApplicationBarMenuItem Text="jump to page" Command="{Binding JumpToPageCommand}"/>
+            <bab:BindableApplicationBarMenuItem Text="refresh" Command="{Binding RefreshCommand}"/>
+        </bab:BindableApplicationBar>
     </Canvas>
- 
-    <phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
-            <shell:ApplicationBarIconButton IconUri="/Images/appbar.previous.png" Text="previous" IsEnabled="False" Click="PreviousButton_Click"/>
-            <shell:ApplicationBarIconButton IconUri="/Images/appbar.next.png" Text="next" IsEnabled="False" Click="NextButton_Click"/>
-            <shell:ApplicationBar.MenuItems>
-                <shell:ApplicationBarMenuItem Text="refresh" Click="RefreshMenu_Click"/>
-                <shell:ApplicationBarMenuItem Text="jump to page" Click="JumpToPageMenu_Click"/>
-                <shell:ApplicationBarMenuItem Text="download all pages" Click="DownloadAllMenu_Click"/>
-            </shell:ApplicationBar.MenuItems>
-        </shell:ApplicationBar>
-    </phone:PhoneApplicationPage.ApplicationBar>
 
 </phone:PhoneApplicationPage>
