@@ -223,6 +223,8 @@ namespace MangaStream
                 IsolatedStorageSettings.ApplicationSettings.Remove(_savedCurrentlyViewingPage);
             }
 
+            IsolatedStorageSettings.ApplicationSettings.Save();
+
             _backgroundTransfer.Serialize();
         }
 
@@ -506,6 +508,7 @@ namespace MangaStream
                 if (latestChapters.Count > 0)
                 {
                     IsolatedStorageSettings.ApplicationSettings[Constants._latestMangaId] = latestChapters[0].MangaId;
+                    IsolatedStorageSettings.ApplicationSettings.Save();
                 }
 
                 // TODO: Is there a more efficient way to empty the entire table?
