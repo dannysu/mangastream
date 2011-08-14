@@ -162,26 +162,6 @@ namespace MangaStream
         public bool IsChaptersInSeriesLoaded { get; private set; }
         public bool IsChapterLoaded { get; private set; }
 
-        private void DeleteFilesWithPrefix(string prefix)
-        {
-            IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication();
-            string[] files = store.GetFileNames("*.data");
-
-            foreach (string filename in files)
-            {
-                try
-                {
-                    if (filename.StartsWith(prefix))
-                    {
-                        store.DeleteFile(filename);
-                    }
-                }
-                catch (Exception)
-                {
-                }
-            }
-        }
-
         public void CleanUp()
         {
             foreach (BackgroundTransferRequest request in BackgroundTransferService.Requests)
@@ -427,6 +407,7 @@ namespace MangaStream
         {
             if (null != request.TransferError)
             {
+                DeleteFile(request.DownloadLocation.OriginalString);
                 Deployment.Current.Dispatcher.BeginInvoke(new DataLoadedTrigger(TriggerDataLoaded), false);
                 return;
             }
@@ -435,7 +416,7 @@ namespace MangaStream
             {
                 string data = Storage.ReadFileToString(request.DownloadLocation.OriginalString);
 
-                IsolatedStorageFile.GetUserStoreForApplication().DeleteFile(request.DownloadLocation.OriginalString);
+                DeleteFile(request.DownloadLocation.OriginalString);
 
                 List<SeriesModel> series = JsonConvert.DeserializeObject<List<SeriesModel>>(data);
 
@@ -489,6 +470,7 @@ namespace MangaStream
         {
             if (null != request.TransferError)
             {
+                DeleteFile(request.DownloadLocation.OriginalString);
                 Deployment.Current.Dispatcher.BeginInvoke(new DataLoadedTrigger(TriggerDataLoaded), false);
                 return;
             }
@@ -497,7 +479,7 @@ namespace MangaStream
             {
                 string data = Storage.ReadFileToString(request.DownloadLocation.OriginalString);
 
-                IsolatedStorageFile.GetUserStoreForApplication().DeleteFile(request.DownloadLocation.OriginalString);
+                DeleteFile(request.DownloadLocation.OriginalString);
 
                 List<MangaAbstractModel> latestChapters = JsonConvert.DeserializeObject<List<MangaAbstractModel>>(data);
                 foreach (MangaAbstractModel chapter in latestChapters)
@@ -567,6 +549,7 @@ namespace MangaStream
         {
             if (null != request.TransferError)
             {
+                DeleteFile(request.DownloadLocation.OriginalString);
                 Deployment.Current.Dispatcher.BeginInvoke(new DataLoadedTrigger(TriggerDataLoaded), false);
                 return;
             }
@@ -575,7 +558,7 @@ namespace MangaStream
             {
                 string data = Storage.ReadFileToString(request.DownloadLocation.OriginalString);
 
-                IsolatedStorageFile.GetUserStoreForApplication().DeleteFile(request.DownloadLocation.OriginalString);
+                DeleteFile(request.DownloadLocation.OriginalString);
 
                 List<MangaAbstractModel> chaptersList = JsonConvert.DeserializeObject<List<MangaAbstractModel>>(data);
 
@@ -637,6 +620,7 @@ namespace MangaStream
         {
             if (null != request.TransferError)
             {
+                DeleteFile(request.DownloadLocation.OriginalString);
                 Deployment.Current.Dispatcher.BeginInvoke(new DataLoadedTrigger(TriggerDataLoaded), false);
                 return;
             }
@@ -645,7 +629,7 @@ namespace MangaStream
             {
                 string data = Storage.ReadFileToString(request.DownloadLocation.OriginalString);
 
-                IsolatedStorageFile.GetUserStoreForApplication().DeleteFile(request.DownloadLocation.OriginalString);
+                DeleteFile(request.DownloadLocation.OriginalString);
 
                 List<MangaModel> mangaList = JsonConvert.DeserializeObject<List<MangaModel>>(data);
                 foreach (MangaModel mangaModel in mangaList)
@@ -955,13 +939,13 @@ namespace MangaStream
         {
             if (null != request.TransferError)
             {
-                // do nothing, the series would just have no icon shown
+                DeleteFile(request.DownloadLocation.OriginalString);
                 return;
             }
 
             try
             {
-                DeleteFilesWithPrefix(request.Tag);
+                DeleteFile(request.Tag + Constants._iconFileExt);
                 IsolatedStorageFile.GetUserStoreForApplication().MoveFile(request.DownloadLocation.OriginalString, Path.GetFileName(request.DownloadLocation.OriginalString));
 
                 Deployment.Current.Dispatcher.BeginInvoke(new GetIconAsyncCompletedTrigger(TriggerLoadIconAsyncCompleted), request.Tag);
@@ -1009,6 +993,18 @@ namespace MangaStream
                 return true;
             }
             return false;
+        }
+
+        void DeleteFile(string filePath)
+        {
+            IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication();
+            try
+            {
+                store.DeleteFile(filePath);
+            }
+            catch (Exception)
+            {
+            }
         }
         #endregion
 

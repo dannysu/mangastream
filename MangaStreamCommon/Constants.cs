@@ -19,6 +19,7 @@ namespace MangaStreamCommon
         public const string _dataFileExt = ".data";
         public const string _dataFilePattern = "*.data";
         public const string _iconFileExt = ".ico";
+        public const string _iconFilePattern = "*.ico";
         public const string _serializedSeriesFile = "Series";
         public const string _serializedLatestChaptersFile = "LatestChapters";
         public const string _serializedChaptersInSeriesFile = "ChaptersInSeries";
