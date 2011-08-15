@@ -28,15 +28,14 @@ namespace MangaStreamCommon
             this._requests = new List<BackgroundTransferRequest>();
 
             this._idMapping = new Dictionary<string, OnTransferCompleted>();
-        }
 
-        public void Serialize()
-        {
-        }
-
-        public void Deserialize()
-        {
-            // TODO: Upon deserializing, the class should attempt to add the queue to BackgroundTransferService
+            foreach (BackgroundTransferRequest request in BackgroundTransferService.Requests)
+            {
+                if (request.TransferStatus == TransferStatus.Completed)
+                {
+                    BackgroundTransferService.Remove(request);
+                }
+            }
         }
 
         public void QueueDownload(string source, string destination, string tag, OnTransferCompleted callback)

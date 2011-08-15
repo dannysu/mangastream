@@ -162,18 +162,6 @@ namespace MangaStream
         public bool IsChaptersInSeriesLoaded { get; private set; }
         public bool IsChapterLoaded { get; private set; }
 
-        public void CleanUp()
-        {
-            foreach (BackgroundTransferRequest request in BackgroundTransferService.Requests)
-            {
-                if (request.TransferStatus == TransferStatus.Completed)
-                {
-                    // TODO: Depending on the tag, let the appropriate thing do the clean up before removing the request
-                    BackgroundTransferService.Remove(request);
-                }
-            }
-        }
-
         public void Serialize()
         {
             if (_currentlyViewingSeries != null)
@@ -204,8 +192,6 @@ namespace MangaStream
             }
 
             IsolatedStorageSettings.ApplicationSettings.Save();
-
-            _backgroundTransfer.Serialize();
         }
 
         public void Deserialize()

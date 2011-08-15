@@ -98,7 +98,6 @@ namespace MangaStream
             catch
             {
             }
-            App.AppData.CleanUp();
             App.AppData.Deserialize();
         }
 
@@ -108,7 +107,6 @@ namespace MangaStream
         {
             if (!e.IsApplicationInstancePreserved)
             {
-                App.AppData.CleanUp();
                 App.AppData.Deserialize();
             }
         }
@@ -118,7 +116,6 @@ namespace MangaStream
         private void Application_Deactivated(object sender, DeactivatedEventArgs e)
         {
             App.AppData.Serialize();
-            App.AppData.CleanUp();
         }
 
         // Code to execute when the application is closing (eg, user hit Back)
@@ -126,7 +123,6 @@ namespace MangaStream
         private void Application_Closing(object sender, ClosingEventArgs e)
         {
             App.AppData.Serialize();
-            App.AppData.CleanUp();
         }
 
         // Code to execute if a navigation fails
