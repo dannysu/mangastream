@@ -306,7 +306,6 @@ namespace MangaStream
                 {
                     MessageBox.Show("Failed to load pages for manga");
                 }
-                NotifyPropertyChanged("DoneLoading");
             }
             SetLoadingStatus(false);
         }
@@ -403,7 +402,6 @@ namespace MangaStream
             {
                 MessageBox.Show("Failed to retrieve images. Please try refresh again.");
             }
-            NotifyPropertyChanged("DoneLoading");
             PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Enabled;
             SetLoadingStatus(false);
         }
@@ -419,7 +417,6 @@ namespace MangaStream
                 // FIXME: In failure case, this function can be called multiple times and so many many error message boxes that user needs to dismiss
                 MessageBox.Show("An unexpected error occurred when downloading all pages.");
             }
-            NotifyPropertyChanged("DoneLoading");
             PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Enabled;
             SetLoadingStatus(false);
         }
