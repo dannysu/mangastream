@@ -24,7 +24,7 @@ using MangaStreamCommon;
 
 namespace MangaStream
 {
-    public class MainPageViewModel : ViewModelBase
+    public class MainPageViewModel : ViewModelBase, ISelectable
     {
         private bool _multipleRefreshesInProgress;
         private const string _taskName = "MangaStream Update Agent";
@@ -39,6 +39,12 @@ namespace MangaStream
         public ICommand LatestChapterTapCommand { get; set; }
 
         private ResourceIntensiveTask resourceIntensiveTask;
+
+        #region ISelectable Members
+
+        public object SelectedItem { get; set; }
+
+        #endregion
 
         public MainPageViewModel()
         {
@@ -204,12 +210,17 @@ namespace MangaStream
 
         public void SeriesTap(object param)
         {
+            /*
             if (param == null)
             {
                 return;
             }
-
+            
             SeriesModel model = (SeriesModel)param;
+            */
+
+            // Temporary workaround for LongListSelector in Aug 2011 Toolkit not allowing binding to SelectedItem anymore
+            SeriesModel model = (SeriesModel)SelectedItem;
 
             OnSelectSeries(model);
 

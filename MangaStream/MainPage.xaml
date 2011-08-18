@@ -71,7 +71,8 @@
                                           Background="Transparent"
                                           Margin="10,0,-12,0" 
                                           ItemsSource="{Binding Series}"
-                                          IsHitTestVisible="{Binding Loading, Converter={StaticResource inverseBoolean}}">
+                                          IsHitTestVisible="{Binding Loading, Converter={StaticResource inverseBoolean}}"
+                                          me:TapInterceptor.Source="{Binding}">
 
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Tap">

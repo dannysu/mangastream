@@ -53,9 +53,7 @@
     <Reference Include="Microsoft.Expression.Interactions" />
     <Reference Include="Microsoft.Phone" />
     <Reference Include="Microsoft.Phone.Controls" />
-    <Reference Include="Microsoft.Phone.Controls.Toolkit">
-      <HintPath>.\Microsoft.Phone.Controls.Toolkit.dll</HintPath>
-    </Reference>
+    <Reference Include="Microsoft.Phone.Controls.Toolkit, Version=7.0.0.0, Culture=neutral, PublicKeyToken=b772ad94eb9ca604, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Phone.Interop" />
     <Reference Include="mscorlib.Extensions" />
     <Reference Include="Newtonsoft.Json.WindowsPhone">
@@ -86,8 +84,10 @@
     <Compile Include="Helpers\InvokeDelegateCommandAction.cs" />
     <Compile Include="Helpers\NavigationService.cs" />
     <Compile Include="Helpers\Navigator.cs" />
+    <Compile Include="Helpers\TapInterceptor.cs" />
     <Compile Include="Interfaces\INavigable.cs" />
     <Compile Include="Interfaces\INavigationService.cs" />
+    <Compile Include="Interfaces\ISelectable.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
