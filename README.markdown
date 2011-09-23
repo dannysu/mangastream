@@ -8,9 +8,9 @@ Screenshots
 
 Dependencies
 ------------
-[BindableApplicationBar] [b]
-[Silverlight Toolkit] [s]
-[Json.NET] [j]
+* [BindableApplicationBar] [b]
+* [Silverlight Toolkit] [s]
+* [Json.NET] [j]
 
   [b]: http://blog.humann.info/post/2011/07/12/BindableApplicationBar-update-for-Windows-Phone-Mango.aspx  "BindableApplicationBar"
   [s]: http://silverlight.codeplex.com  "Silverlight Toolkit"
