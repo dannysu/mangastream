@@ -221,10 +221,12 @@ namespace MangaStream
 
             // Temporary workaround for LongListSelector in Aug 2011 Toolkit not allowing binding to SelectedItem anymore
             SeriesModel model = (SeriesModel)SelectedItem;
+            if (model != null)
+            {
+                OnSelectSeries(model);
 
-            OnSelectSeries(model);
-
-            NavigationService.Navigate("/ChaptersPage.xaml");
+                NavigationService.Navigate("/ChaptersPage.xaml");
+            }
         }
 
         public void LatestChapterTap(object param)

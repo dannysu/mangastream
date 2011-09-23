@@ -1,0 +1,6 @@
+*.csproj.user
+*.suo
+Bin/
+obj/
+/Dependencies/
+/IsolatedStorage/
