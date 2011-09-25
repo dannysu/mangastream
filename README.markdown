@@ -1,10 +1,10 @@
 Screenshots
 -----------
-![MangaStream1](http://www.dannysu.info/wp-content/uploads/2011/08/MangaStream1.png)
-![MangaStream2](http://www.dannysu.info/wp-content/uploads/2011/08/MangaStream2.png)
-![MangaStream3](http://www.dannysu.info/wp-content/uploads/2011/08/MangaStream3.png)
-![MangaStream4](http://www.dannysu.info/wp-content/uploads/2011/08/MangaStream4.png)
-![MangaStream5](http://www.dannysu.info/wp-content/uploads/2011/08/MangaStream5.png)
+![MangaStream1](http://www.dannysu.com/wp-content/uploads/2011/08/MangaStream1.png)&nbsp;
+![MangaStream2](http://www.dannysu.com/wp-content/uploads/2011/08/MangaStream2.png)&nbsp;
+![MangaStream3](http://www.dannysu.com/wp-content/uploads/2011/08/MangaStream3.png)&nbsp;
+![MangaStream4](http://www.dannysu.com/wp-content/uploads/2011/08/MangaStream4.png)&nbsp;
+![MangaStream5](http://www.dannysu.com/wp-content/uploads/2011/08/MangaStream5.png)&nbsp;
 
 Dependencies
 ------------
