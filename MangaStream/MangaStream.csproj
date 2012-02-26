@@ -56,11 +56,11 @@
     <Reference Include="Microsoft.Phone.Controls.Toolkit, Version=7.0.0.0, Culture=neutral, PublicKeyToken=b772ad94eb9ca604, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Phone.Interop" />
     <Reference Include="mscorlib.Extensions" />
-    <Reference Include="Newtonsoft.Json.WindowsPhone">
-      <HintPath>..\Dependencies\Newtonsoft.Json.WindowsPhone.dll</HintPath>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\Dependencies\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Phone7.Fx.Preview">
-      <HintPath>..\Dependencies\Phone7.Fx.Preview.dll</HintPath>
+    <Reference Include="Phone7.Fx">
+      <HintPath>..\Dependencies\Phone7.Fx.dll</HintPath>
     </Reference>
     <Reference Include="system.data.linq" />
     <Reference Include="System.Windows" />

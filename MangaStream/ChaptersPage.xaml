@@ -9,7 +9,7 @@
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
     xmlns:ec="clr-namespace:Microsoft.Expression.Interactivity.Core;assembly=Microsoft.Expression.Interactions" 
-    xmlns:bab="clr-namespace:Phone7.Fx.Preview;assembly=Phone7.Fx.Preview"
+    xmlns:bab="clr-namespace:Phone7.Fx.Controls;assembly=Phone7.Fx"
     xmlns:me="clr-namespace:MangaStream"
     x:Class="MangaStream.ChaptersPage"
     SupportedOrientations="Portrait" Orientation="Portrait"

@@ -42,8 +42,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Phone" />
-    <Reference Include="Newtonsoft.Json.WindowsPhone">
-      <HintPath>..\Dependencies\Newtonsoft.Json.WindowsPhone.dll</HintPath>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\Dependencies\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="system.data.linq" />
     <Reference Include="System.Windows" />
