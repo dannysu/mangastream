@@ -14,7 +14,8 @@
     x:Class="MangaStream.ChaptersPage"
     SupportedOrientations="Portrait" Orientation="Portrait"
     mc:Ignorable="d" d:DesignHeight="728" d:DesignWidth="480"
-    shell:SystemTray.IsVisible="False"
+    shell:SystemTray.IsVisible="True"
+    shell:SystemTray.Opacity="0"
     me:Navigator.Source="{Binding}"
     toolkit:TiltEffect.IsTiltEnabled="True">
 

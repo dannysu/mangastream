@@ -17,7 +17,8 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait"  Orientation="Portrait"
-    shell:SystemTray.IsVisible="False"
+    shell:SystemTray.IsVisible="True"
+    shell:SystemTray.Opacity="0"
     toolkit:TiltEffect.IsTiltEnabled="True"
     me:Navigator.Source="{Binding}">
 
