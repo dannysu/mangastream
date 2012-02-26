@@ -382,7 +382,7 @@ namespace MangaStream
             }
             if (!IsSeriesLoaded)
             {
-                string source = Constants._serverUri + string.Format(Constants._seriesRequestTemplate, Constants._apiKey);
+                string source = ServerConstants._serverUri + string.Format(Constants._seriesRequestTemplate, ServerConstants._apiKey);
                 string destination = Constants._downloadPath + Constants._serializedSeriesFile + Constants._dataFileExt;
 
                 _backgroundTransfer.QueueDownload(source, destination, null, new BackgroundTransfer.OnTransferCompleted(OnSeriesTransferCompleted));
@@ -445,7 +445,7 @@ namespace MangaStream
             }
             if (!IsLatestChaptersLoaded)
             {
-                string source = Constants._serverUri + string.Format(Constants._latestRequestTemplate, Constants._apiKey);
+                string source = ServerConstants._serverUri + string.Format(Constants._latestRequestTemplate, ServerConstants._apiKey);
                 string destination = Constants._downloadPath + Constants._serializedLatestChaptersFile + Constants._dataFileExt;
 
                 _backgroundTransfer.QueueDownload(source, destination, null, new BackgroundTransfer.OnTransferCompleted(OnLatestChaptersTransferCompleted));
@@ -523,7 +523,7 @@ namespace MangaStream
             }
             if (!IsChaptersInSeriesLoaded)
             {
-                string source = Constants._serverUri + string.Format(Constants._chaptersRequestTemplate, Constants._apiKey, _currentlyViewingSeries.SeriesId);
+                string source = ServerConstants._serverUri + string.Format(Constants._chaptersRequestTemplate, ServerConstants._apiKey, _currentlyViewingSeries.SeriesId);
                 string destination = Constants._downloadPath + Constants._serializedChaptersInSeriesFile + _currentlyViewingSeries.SeriesId + Constants._dataFileExt;
                 string tag = _currentlyViewingSeries.SeriesId;
 
@@ -594,7 +594,7 @@ namespace MangaStream
             }
             if (!IsChapterLoaded)
             {
-                string source = Constants._serverUri + string.Format(Constants._chapterRequestTemplate, Constants._apiKey, _currentlyViewingChapter.MangaId);
+                string source = ServerConstants._serverUri + string.Format(Constants._chapterRequestTemplate, ServerConstants._apiKey, _currentlyViewingChapter.MangaId);
                 string destination = Constants._downloadPath + Constants._serializedMangaFile + _currentlyViewingChapter.MangaId + Constants._dataFileExt;
                 string tag = _currentlyViewingChapter.MangaId;
 

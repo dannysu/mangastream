@@ -46,7 +46,7 @@ namespace MangaStreamAgent
             // Download latest chapters
             WebClient client = new WebClient();
             client.DownloadStringCompleted += new DownloadStringCompletedEventHandler(OnLatestChaptersTransferCompleted);
-            client.DownloadStringAsync(new Uri(Constants._serverUri + string.Format(Constants._latestRequestTemplate, Constants._apiKey)));
+            client.DownloadStringAsync(new Uri(ServerConstants._serverUri + string.Format(Constants._latestRequestTemplate, ServerConstants._apiKey)));
 
             _waitHandle.WaitOne(TimeSpan.FromMinutes(9));
 

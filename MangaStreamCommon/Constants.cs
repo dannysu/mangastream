@@ -5,8 +5,6 @@ namespace MangaStreamCommon
     public class Constants
     {
         // Service configuration
-        public const string _serverUri = "TODO: Fill In";
-        public const string _apiKey = "TODO: Fill In";
         public const string _seriesRequestTemplate = "?apikey={0}&call=get_series";
         public const string _latestRequestTemplate = "?apikey={0}&call=get_chapters_latest";
         public const string _chaptersRequestTemplate = "?apikey={0}&call=get_chapters_by_series&series_id={1}";
