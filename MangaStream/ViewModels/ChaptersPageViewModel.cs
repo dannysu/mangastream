@@ -9,6 +9,7 @@ using System.Windows.Threading;
 using Newtonsoft.Json;
 using System.IO.IsolatedStorage;
 using MangaStreamCommon;
+using Microsoft.Phone.Controls;
 
 namespace MangaStream
 {
@@ -92,7 +93,9 @@ namespace MangaStream
 
             OnSelectChapter((MangaAbstractModel)param);
 
-            NavigationService.Navigate("/ViewMangaPage.xaml");
+            // TODO: Temporary workaround. Need to figure out how to make Navigator work for this page.
+            var root = App.Current.RootVisual as PhoneApplicationFrame;
+            root.Navigate(new Uri("/ViewMangaPage.xaml", UriKind.Relative));
         }
 
         private bool CanExecute(object param)
